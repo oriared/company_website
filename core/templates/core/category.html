@@ -1,0 +1,23 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="row" style="padding-top: 15px;">
+    <div class="col">
+        <div class="row row-cols row-cols-md-6 g-4">
+                {% for product in products %}
+                <div class="col">
+                    <a href="{% url 'product' product.slug %}">
+                        <div class="card h-100 text-center">
+                            <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product }}">
+                            <div class="card-body">
+                              <h6 class="card-title">{{ product }}</h6>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+        </div>
+    </div>
+    </div>
+
+{% endblock %}

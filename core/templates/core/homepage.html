@@ -1,0 +1,41 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+
+<div id="carouselExample" class="carousel slide">
+    <div class="carousel-inner">
+        {% for item in carousel %}
+      <div class="carousel-item {% if forloop.counter0 %} active {% endif %}">
+        <img src="{{ item.image.url }}" class="d-block w-100" alt="...">
+      </div>
+        {% endfor %}
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+<div class="row" style="padding-top: 15px;">
+    <div class="col">
+        <div class="row row-cols row-cols-md-6 g-4">
+                {% for cat in categories %}
+                <div class="col">
+                    <a href="{% url 'category' cat.slug %}">
+                        <div class="card h-100 text-center">
+                            <img src="{{ cat.image.url }}" class="card-img-top" alt="{{ cat }}">
+                            <div class="card-body">
+                              <h6 class="card-title">{{ cat }}</h6>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+        </div>
+    </div>
+    </div>
+
+{% endblock %}

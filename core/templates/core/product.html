@@ -1,0 +1,14 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+
+<h2>{{ product.name }}</h2>
+<img src="{{ product.image.url }}">
+<br>
+Артикул: {{ product.productdetail.vendor_code }}
+<br>
+Вес, г: {{ product.weight }}
+<br>
+{{ product.productdetail.description }}
+
+{% endblock %}
