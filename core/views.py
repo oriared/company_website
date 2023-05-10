@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from django.views.generic import ListView, DetailView
 from django.views.generic.base import TemplateView
 
@@ -12,8 +11,8 @@ class HomePageView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Главная'
-        context['categories'] = Category.objects.filter(is_published=True).all()
-        context['carousel'] = Carousel.objects.filter(is_active=True).all()
+        context['categories'] = Category.objects.filter(is_published=True)
+        context['carousel'] = Carousel.objects.filter(is_active=True)
         context['news'] = []
         return context
 
@@ -24,20 +23,22 @@ class CategoryView(ListView):
     context_object_name = 'products'
 
     def get_queryset(self):
-        return Product.objects.filter(is_published=True, type__category__slug=self.kwargs['cat_slug'])
+        return Product.objects.filter(is_published=True, type__category__slug=self.kwargs['slug'])
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = Category.objects.get(slug=self.kwargs.get('cat_slug')).name
+        context['title'] = Category.objects.get(slug=self.kwargs.get('slug')).name
         return context
 
 
 class ProductView(DetailView):
 
-    model = Product
     template_name = 'core/product.html'
+
+    def get_queryset(self):
+        return Product.objects.filter(is_published=True).select_related('productdetail')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'lk;lk;lk;kl'
+        context['title'] = Product.objects.get(slug=self.kwargs.get('slug')).name
         return context

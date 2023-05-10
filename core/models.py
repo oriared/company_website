@@ -13,9 +13,7 @@ class Product(models.Model):
     image = models.ImageField(upload_to=path_product_image,
                               default='images/default.jpg',
                               verbose_name='Фото')
-    weight = models.PositiveIntegerField(verbose_name='Вес, грамм')
     is_gost = models.BooleanField(verbose_name='Произведён по ГОСТ')
-    is_post = models.BooleanField(verbose_name='Постный продукт')
     is_published = models.BooleanField(default=True, verbose_name='Виден всем')
 
     def __str__(self):
@@ -37,26 +35,39 @@ class Product(models.Model):
 
 
 class ProductDetail(models.Model):
+    class Units(models.TextChoices):
+        DAYS = 'D', 'дней'
+        MOUNTHS = 'M', 'мес'
+
     product = models.OneToOneField('Product', on_delete=models.CASCADE,
                                    null=True, verbose_name="Товар")
-    description = models.TextField(default='Описание отсутствует',
-                                   verbose_name='Описание')
-    vendor_code = models.CharField(max_length=50, blank=True,
-                                   verbose_name='Артикул')
+    description = models.TextField(blank=True, verbose_name='Описание')
     conditions = models.TextField(blank=True, verbose_name='Условия хранения')
-    packaging = models.CharField(max_length=255, verbose_name='Фасовка')
+    storage_time = models.PositiveIntegerField(verbose_name='Срок хранения')
+    storage_time_units = models.CharField(max_length=1, choices=Units.choices,
+                                          default=Units.MOUNTHS,
+                                          verbose_name='')
     calories = models.FloatField(verbose_name='Калорийность')
     proteins = models.FloatField(verbose_name='Белки')
     fats = models.FloatField(verbose_name='Жиры')
     carbohydrates = models.FloatField(verbose_name='Углеводы')
 
-    def get_packing_weights(self):
-        packing = tuple(map(int, self.packaging.split(', ')))
-        return packing
-
     class Meta:
         verbose_name = 'Характеристики товара'
         verbose_name_plural = 'Характеристики товара'
+
+
+class ProductPackaging(models.Model):
+    product = models.ForeignKey('Product', on_delete=models.CASCADE,
+                                null=True, verbose_name="Товар")
+    vendor_code = models.CharField(max_length=50, blank=True,
+                                   verbose_name='Артикул')
+    weight = models.PositiveIntegerField(verbose_name='Вес, грамм')
+    packaging = models.PositiveIntegerField(verbose_name='Вложение, шт')
+
+    class Meta:
+        verbose_name = 'Фасовка'
+        verbose_name_plural = 'Фасовка'
 
 
 class ProductType(models.Model):

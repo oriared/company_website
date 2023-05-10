@@ -5,9 +5,9 @@
 <h2>{{ product.name }}</h2>
 <img src="{{ product.image.url }}">
 <br>
-Артикул: {{ product.productdetail.vendor_code }}
+Артикул: {{ product.packaging.vendor_code }}
 <br>
-Вес, г: {{ product.weight }}
+Вес, г: {{ product.packaging.weight }}
 <br>
 {{ product.productdetail.description }}
 

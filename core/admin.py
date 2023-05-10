@@ -1,22 +1,28 @@
 from django.contrib import admin
 
-from .models import Product, ProductType, Category, ProductDetail, Carousel
+from .models import Product, ProductType, Category, ProductDetail, ProductPackaging, Carousel
 
 
-class ProductDetailAdmin(admin.StackedInline):
+class ProductDetailInline(admin.StackedInline):
     model = ProductDetail
-    fields = ('vendor_code', 'description', 'conditions', 'packaging',
+    fields = ('description', 'conditions', ('storage_time', 'storage_time_units'),
               'calories', ('proteins', 'fats', 'carbohydrates'))
+
+
+class ProductPackagingInline(admin.StackedInline):
+    model = ProductPackaging
+    fields = (('vendor_code', 'weight', 'packaging'),)
 
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'type', 'weight', 'is_published')
+    list_display = ('name', 'type', 'is_published')
     list_display_links = ('name', 'type')
+    fields = ('name', 'slug', 'type', 'image', ('is_gost', 'is_published'))
     search_fields = ('name',)
     list_filter = ('is_published',)
-    prepopulated_fields = {'slug': ('name', 'weight')}
-    inlines = [ProductDetailAdmin]
+    prepopulated_fields = {'slug': ('name',)}
+    inlines = [ProductDetailInline, ProductPackagingInline]
 
 
 @admin.register(ProductType)
