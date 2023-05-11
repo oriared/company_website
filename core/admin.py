@@ -33,7 +33,7 @@ class ProductTypeAdmin(admin.ModelAdmin):
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('name',)
+    list_display = ('name', 'is_published')
     prepopulated_fields = {'slug': ('name',)}
 
 

@@ -11,7 +11,6 @@ class HomePageView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Главная'
-        context['categories'] = Category.objects.filter(is_published=True)
         context['carousel'] = Carousel.objects.filter(is_active=True)
         context['news'] = []
         return context

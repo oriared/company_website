@@ -18,7 +18,7 @@
 <div class="row">
   <div class="col-2 bg-dark">
   {% block menu %}
-    <div class="btn-group-vertical d-grid gap-1 mx-auto" role="group" aria-label="Vertical button group">
+    <div class="btn-group-vertical d-grid gap-1 mx-auto" style="padding-top: 25%;" role="group" aria-label="Vertical button group">
         <a type="button" class="btn btn-outline-light" href="{% url 'home' %}" role="button">Главная</a>
         <div class="btn-group dropend" role="group">
             <button type="button" class="btn btn-outline-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
@@ -41,6 +41,21 @@
               {% endfor %}
             </ul>
         </div>
+        <a type="button" class="btn btn-outline-light" href="{% url 'home' %}" role="button">Где купить</a>
+        <div class="btn-group dropend" role="group">
+            <button type="button" class="btn btn-outline-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+              Сотрудничество
+            </button>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#">Дистрибьюция </a></li>
+              <li><a class="dropdown-item" href="#">Private label</a></li>
+              <li><a class="dropdown-item" href="#">Поставщикам</a></li>
+              <li><a class="dropdown-item" href="#">Тендеры</a></li>
+            </ul>
+        </div>
+        <a type="button" class="btn btn-outline-light" href="{% url 'home' %}" role="button">Новости</a>
+        <a type="button" class="btn btn-outline-light" href="{% url 'home' %}" role="button">Вакансии</a>
+        <a type="button" class="btn btn-outline-light" href="{% url 'home' %}" role="button">Контакты</a>
     </div>
   {% endblock %}
   </div>

@@ -59,7 +59,8 @@ class ProductDetail(models.Model):
 
 class ProductPackaging(models.Model):
     product = models.ForeignKey('Product', on_delete=models.CASCADE,
-                                null=True, verbose_name="Товар")
+                                null=True, related_name='packaging',
+                                verbose_name="Товар")
     vendor_code = models.CharField(max_length=50, blank=True,
                                    verbose_name='Артикул')
     weight = models.PositiveIntegerField(verbose_name='Вес, грамм')
@@ -101,7 +102,7 @@ class Category(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('catalog', args=(self.slug,))
+        return reverse('category', args=(self.slug,))
 
     class Meta:
         verbose_name = 'Категория'

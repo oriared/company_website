@@ -1,6 +1,13 @@
 {% extends 'core/base.html' %}
 
 {% block content %}
+<ul class="nav nav-underline" style="background-color: blanchedalmond; padding-inline: 15%;">
+    {% for cat in categories %}
+    <li class="nav-item">
+      <a class="nav-link {% if products.first.type.category == cat %}active" aria-current="page{% endif %}" style="color: red;" href="{% url 'category' cat.slug %}">{{ cat }}</a>
+    </li>
+    {% endfor %}
+  </ul>
 <div class="row" style="padding-top: 15px;">
     <div class="col">
         <div class="row row-cols row-cols-md-6 g-4">

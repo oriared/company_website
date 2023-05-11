@@ -1,14 +1,46 @@
 {% extends 'core/base.html' %}
-
+{% load static %}
 {% block content %}
 
 <h2>{{ product.name }}</h2>
+{% if product.is_gost %}
+<img src="{% static "img/gost.jpg" %}" alt="ГОСТ">
+{% endif %}
 <img src="{{ product.image.url }}">
 <br>
-Артикул: {{ product.packaging.vendor_code }}
-<br>
-Вес, г: {{ product.packaging.weight }}
-<br>
-{{ product.productdetail.description }}
-
+<table class="table table-primary">
+    <tbody>
+      <tr>
+        <th  scope="row">Описание</th>
+        <td>{{ product.productdetail.description }}</td>
+      </tr>
+      <tr>
+        <th scope="row">Условия хранения:</th>
+        <td>{{ product.productdetail.conditions }}</td>
+      </tr>
+      <tr>
+        <th scope="row">Вес, г:</th>
+        <td>{% for item in product.packaging.all %}
+              {{ item.weight }}{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        </td>
+      </tr>
+      <tr>
+        <th scope="row">Вложений в упаковке:</th>
+        <td>{% for item in product.packaging.all %}
+              {{ item.packaging }}{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        </td>
+      </tr>
+      <tr>
+        <th scope="row">Срок хранения</th>
+        <td>{{ product.productdetail.storage_time }} {{ product.productdetail.get_storage_time_units_display }}</td>
+      </tr>
+      <tr>
+        <th scope="row">КБЖУ</th>
+        <td>калорийность: {{ product.productdetail.calories|floatformat }} ккал<br>белки: {{ product.productdetail.proteins|floatformat }} г<br> 
+          жиры: {{ product.productdetail.fats|floatformat }} г<br>углеводы: {{ product.productdetail.carbohydrates|floatformat }} г</td>
+      </tr>
+    </tbody>
+</table>
 {% endblock %}
