@@ -1,0 +1,48 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+  <h1>Ваша корзина</h1>
+  <table class="table table-secondary">
+    <thead>
+      <tr>
+      <th>Фото</th>
+      <th>Товар</th>
+      <th>Вес единицы</th>
+      <th>Вложений в упаковке</th>
+      <th>Вес упаковки</th>
+      <th>Количество упаковок</th>
+      <th>Удалить</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in cart %}
+      {% with product=item.product %}
+        <tr>
+          <td>
+            <a href="{{ product.product.get_absolute_url }}">
+              <img src="{{ product.product.image.url }}">
+            </a>
+          </td>
+          <td>{{ product.product.name }}</td>
+          <td>{{ product.weight }}</td>
+          <td>{{ product.packaging }}</td>
+          <td>{{ product.get_package_weight }}</td>
+          <td>{{ item.quantity }}</td>
+          <td>
+            <form action="{% url "cart:cart_remove" product.productdetail.vendor_code %}" method="post">
+              <input type="submit" value="Remove">
+              {% csrf_token %}
+            </form>
+          </td>
+        </tr>
+      {% endwith %}
+      {% endfor %}
+    </tbody>
+  </table>
+  <p class="text-right">
+    <a href="{% url "core:home" %}" class="button
+    light">В каталог</a>
+    <a href="#" class="button">Оформить</a>
+  </p>
+{% endblock %}

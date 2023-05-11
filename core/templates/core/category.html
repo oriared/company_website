@@ -4,7 +4,9 @@
 <ul class="nav nav-underline" style="background-color: blanchedalmond; padding-inline: 15%;">
     {% for cat in categories %}
     <li class="nav-item">
-      <a class="nav-link {% if products.first.type.category == cat %}active" aria-current="page{% endif %}" style="color: red;" href="{% url 'category' cat.slug %}">{{ cat }}</a>
+      <a class="nav-link {% if products.first.type.category == cat %}active" 
+      aria-current="page{% endif %}" style="color: red;" 
+      href="{% url 'core:category' cat.slug %}">{{ cat }}</a>
     </li>
     {% endfor %}
   </ul>
@@ -13,7 +15,7 @@
         <div class="row row-cols row-cols-md-6 g-4">
                 {% for product in products %}
                 <div class="col">
-                    <a href="{% url 'product' product.slug %}">
+                    <a href="{% url 'core:product' product.slug %}">
                         <div class="card h-100 text-center">
                             <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product }}">
                             <div class="card-body">

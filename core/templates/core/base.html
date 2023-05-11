@@ -19,7 +19,7 @@
   <div class="col-2 bg-dark">
   {% block menu %}
     <div class="btn-group-vertical d-grid gap-1 mx-auto" style="padding-top: 25%;" role="group" aria-label="Vertical button group">
-        <a type="button" class="btn btn-outline-light" href="{% url 'home' %}" role="button">Главная</a>
+        <a type="button" class="btn btn-outline-light" href="{% url 'core:home' %}" role="button">Главная</a>
         <div class="btn-group dropend" role="group">
             <button type="button" class="btn btn-outline-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
               Компания
@@ -37,11 +37,11 @@
             </button>
             <ul class="dropdown-menu">
               {% for item in categories %}
-              <li><a class="dropdown-item" href="{% url 'category' item.slug %}">{{ item }}</a></li>
+              <li><a class="dropdown-item" href="{% url 'core:category' item.slug %}">{{ item }}</a></li>
               {% endfor %}
             </ul>
         </div>
-        <a type="button" class="btn btn-outline-light" href="{% url 'home' %}" role="button">Где купить</a>
+        <a type="button" class="btn btn-outline-light" href="{% url 'core:home' %}" role="button">Где купить</a>
         <div class="btn-group dropend" role="group">
             <button type="button" class="btn btn-outline-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
               Сотрудничество
@@ -53,9 +53,9 @@
               <li><a class="dropdown-item" href="#">Тендеры</a></li>
             </ul>
         </div>
-        <a type="button" class="btn btn-outline-light" href="{% url 'home' %}" role="button">Новости</a>
-        <a type="button" class="btn btn-outline-light" href="{% url 'home' %}" role="button">Вакансии</a>
-        <a type="button" class="btn btn-outline-light" href="{% url 'home' %}" role="button">Контакты</a>
+        <a type="button" class="btn btn-outline-light" href="{% url 'core:home' %}" role="button">Новости</a>
+        <a type="button" class="btn btn-outline-light" href="{% url 'core:home' %}" role="button">Вакансии</a>
+        <a type="button" class="btn btn-outline-light" href="{% url 'core:home' %}" role="button">Контакты</a>
     </div>
   {% endblock %}
   </div>

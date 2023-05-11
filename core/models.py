@@ -66,6 +66,9 @@ class ProductPackaging(models.Model):
     weight = models.PositiveIntegerField(verbose_name='Вес, грамм')
     packaging = models.PositiveIntegerField(verbose_name='Вложение, шт')
 
+    def get_package_weight(self):
+        return self.weight * self.packaging
+
     class Meta:
         verbose_name = 'Фасовка'
         verbose_name_plural = 'Фасовка'
