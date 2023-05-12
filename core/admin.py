@@ -11,7 +11,7 @@ class ProductDetailInline(admin.StackedInline):
 
 class ProductPackagingInline(admin.StackedInline):
     model = ProductPackaging
-    fields = (('vendor_code', 'weight', 'packaging'),)
+    fields = (('sku', 'weight', 'packaging'),)
 
 
 @admin.register(Product)

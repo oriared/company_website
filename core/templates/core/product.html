@@ -19,20 +19,6 @@
         <td>{{ product.productdetail.conditions }}</td>
       </tr>
       <tr>
-        <th scope="row">Вес, г:</th>
-        <td>{% for item in product.packaging.all %}
-              {{ item.weight }}{% if not forloop.last %},{% endif %}
-            {% endfor %}
-        </td>
-      </tr>
-      <tr>
-        <th scope="row">Вложений в упаковке:</th>
-        <td>{% for item in product.packaging.all %}
-              {{ item.packaging }}{% if not forloop.last %},{% endif %}
-            {% endfor %}
-        </td>
-      </tr>
-      <tr>
         <th scope="row">Срок хранения</th>
         <td>{{ product.productdetail.storage_time }} {{ product.productdetail.get_storage_time_units_display }}</td>
       </tr>
@@ -43,7 +29,7 @@
       </tr>
     </tbody>
 </table>
-<form action="" method="post">
+<form action="{% url "cart:cart_add" %}" method="post">
   {{ cart_product_form }}
   {% csrf_token %}
   <input type="submit" value="Добавить в корзину">

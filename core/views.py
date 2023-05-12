@@ -2,7 +2,7 @@ from django.views.generic import ListView, DetailView
 from django.views.generic.base import TemplateView
 
 from .models import Product, Category, Carousel
-from cart.forms import CartAddProductForm
+from cart.forms import build_add_form
 
 
 class HomePageView(TemplateView):
@@ -40,6 +40,8 @@ class ProductView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = Product.objects.get(slug=self.kwargs.get('slug')).name
-        context['cart_product_form'] = CartAddProductForm()
+        product = Product.objects.get(slug=self.kwargs.get('slug'))
+        context['title'] = product.name
+        form = build_add_form(product=product)
+        context['cart_product_form'] = form
         return context

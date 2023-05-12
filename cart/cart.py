@@ -1,4 +1,3 @@
-from decimal import Decimal
 from django.conf import settings
 from core.models import ProductPackaging
 
@@ -12,32 +11,32 @@ class Cart:
             cart = self.session[settings.CART_SESSION_ID] = {}
         self.cart = cart
 
-    def add(self, product, quantity=1, override_quantity=False):
-        product_vendor_code = product.vendor_code
-        if product_vendor_code not in self.cart:
-            self.cart[product_vendor_code] = {'quantity': 0}
+    def add(self, product_sku, quantity=1, override_quantity=False):
+        if product_sku not in self.cart:
+            self.cart[product_sku] = {'quantity': 0}
         if override_quantity:
-            self.cart[product_vendor_code]['quantity'] = quantity
+            self.cart[product_sku]['quantity'] = quantity
         else:
-            self.cart[product_vendor_code]['quantity'] += quantity
+            self.cart[product_sku]['quantity'] += quantity
         self.save()
 
     def save(self):
         self.session.modified = True
 
-    def remove(self, product):
-        product_vendor_code = product.vendor_code
-        if product_vendor_code in self.cart:
-            del self.cart[product_vendor_code]
+    def remove(self, product_sku):
+        if product_sku in self.cart:
+            del self.cart[product_sku]
             self.save()
 
     def __iter__(self):
-        product_vendor_codes = self.cart.keys()
-        products = ProductPackaging.objects.filter(vendor_code__in=product_vendor_codes)
+        product_skus = self.cart.keys()
+        product_packages = ProductPackaging.objects.filter(sku__in=product_skus)
         cart = self.cart.copy()
-        for product in products:
-            cart[product.vendor_code]['product'] = product
+        for package in product_packages:
+            cart[package.sku]['packaging'] = package
+            cart[package.sku]['product'] = package.product
         for item in cart.values():
+            item['total_weight'] = item['packaging'].get_package_weight() * item['quantity']
             yield item
 
     def __len__(self):

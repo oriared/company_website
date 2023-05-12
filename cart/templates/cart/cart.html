@@ -11,32 +11,32 @@
       <th>Вес единицы</th>
       <th>Вложений в упаковке</th>
       <th>Вес упаковки</th>
-      <th>Количество упаковок</th>
+      <th>Кол-во упаковок</th>
+      <th>Общий вес</th>
       <th>Удалить</th>
       </tr>
     </thead>
     <tbody>
       {% for item in cart %}
-      {% with product=item.product %}
         <tr>
           <td>
-            <a href="{{ product.product.get_absolute_url }}">
-              <img src="{{ product.product.image.url }}">
+            <a href="{% url "core:product" item.product.slug %}">
+              <img src="{{ item.product.image.url }}" height="80px">
             </a>
           </td>
-          <td>{{ product.product.name }}</td>
-          <td>{{ product.weight }}</td>
-          <td>{{ product.packaging }}</td>
-          <td>{{ product.get_package_weight }}</td>
-          <td>{{ item.quantity }}</td>
+          <td>{{ item.product.name }}</td>
+          <td>{{ item.packaging.weight }} г.</td>
+          <td>{{ item.packaging.packaging }} шт</td>
+          <td>{{ item.packaging.get_package_weight }} г.</td>
+          <td>{{ item.quantity }} шт</td>
+          <td>{{ item.total_weight }} г.</td>
           <td>
-            <form action="{% url "cart:cart_remove" product.productdetail.vendor_code %}" method="post">
-              <input type="submit" value="Remove">
+            <form action="{% url "cart:cart_remove" item.packaging.sku %}" method="post">
+              <input type="submit" value="Удалить">
               {% csrf_token %}
             </form>
           </td>
         </tr>
-      {% endwith %}
       {% endfor %}
     </tbody>
   </table>

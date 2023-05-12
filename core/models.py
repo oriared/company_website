@@ -61,10 +61,12 @@ class ProductPackaging(models.Model):
     product = models.ForeignKey('Product', on_delete=models.CASCADE,
                                 null=True, related_name='packaging',
                                 verbose_name="Товар")
-    vendor_code = models.CharField(max_length=50, blank=True,
-                                   verbose_name='Артикул')
+    sku = models.CharField(max_length=50, unique=True, verbose_name='Артикул')
     weight = models.PositiveIntegerField(verbose_name='Вес, грамм')
     packaging = models.PositiveIntegerField(verbose_name='Вложение, шт')
+
+    def __str__(self):
+        return self.sku
 
     def get_package_weight(self):
         return self.weight * self.packaging
