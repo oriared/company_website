@@ -1,24 +1,17 @@
+from django.core.exceptions import ValidationError
 from django import forms
-
-from core.models import ProductPackaging
-
-
-class PackageModelChoiceField(forms.ModelChoiceField):
-    def label_from_instance(self, obj):
-        return f'Вес: {obj.weight} г., в коробке {obj.packaging} шт. Общий вес {obj.get_package_weight()} г.'
+from django.forms import BaseFormSet
 
 
-def build_add_form(*args, product):
-    queryset = ProductPackaging.objects.filter(product=product)
+class CartAddProductForm(forms.Form):
+    quantity = forms.IntegerField(label='', min_value=0,
+                                  max_value=999, required=False)
+    product_sku = forms.CharField(widget=forms.HiddenInput)
 
-    class CartAddProductForm(forms.Form):
-        sku = PackageModelChoiceField(label='Фасовка:',
-                                      queryset=queryset,
-                                      to_field_name="sku",
-                                      widget=forms.RadioSelect)
-        quantity = forms.IntegerField(label='Количество', min_value=1, 
-                                      max_value=999)
-        override = forms.BooleanField(required=False, initial=False,
-                                      widget=forms.HiddenInput)
 
-    return CartAddProductForm(*args)
+class BaseAddProductFormSet(BaseFormSet):
+    def clean(self):
+        if any(self.errors):
+            return
+        if not any(map(lambda x: x.cleaned_data.get('quantity'), self.forms)):
+            raise ValidationError('Не заполнена ни одна форма.')

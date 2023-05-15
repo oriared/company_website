@@ -11,13 +11,10 @@ class Cart:
             cart = self.session[settings.CART_SESSION_ID] = {}
         self.cart = cart
 
-    def add(self, product_sku, quantity=1, override_quantity=False):
+    def add(self, product_sku, quantity):
         if product_sku not in self.cart:
             self.cart[product_sku] = {'quantity': 0}
-        if override_quantity:
-            self.cart[product_sku]['quantity'] = quantity
-        else:
-            self.cart[product_sku]['quantity'] += quantity
+        self.cart[product_sku]['quantity'] += quantity
         self.save()
 
     def save(self):
@@ -29,8 +26,8 @@ class Cart:
             self.save()
 
     def __iter__(self):
-        product_skus = self.cart.keys()
-        product_packages = ProductPackaging.objects.filter(sku__in=product_skus)
+        skus = self.cart.keys()
+        product_packages = ProductPackaging.objects.filter(sku__in=skus)
         cart = self.cart.copy()
         for package in product_packages:
             cart[package.sku]['packaging'] = package

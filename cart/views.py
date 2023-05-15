@@ -1,24 +1,26 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.forms import formset_factory
+from django.shortcuts import redirect
 from django.views.decorators.http import require_POST
 from django.views.generic import TemplateView
 
-from core.models import ProductPackaging
 from .cart import Cart
-from .forms import build_add_form
+
+from cart.forms import CartAddProductForm, BaseAddProductFormSet
 
 
 @require_POST
 def cart_add(request):
     cart = Cart(request)
-    product_sku = request.POST.get('sku')
-    package = get_object_or_404(ProductPackaging,
-                                sku=product_sku)
-    form = build_add_form(request.POST, product=package.product)
-    if form.is_valid():
-        cd = form.cleaned_data
-        cart.add(product_sku=product_sku,
-                 quantity=cd['quantity'],
-                 override_quantity=cd['override'])
+
+    ProductFormSet = formset_factory(CartAddProductForm,
+                                     formset=BaseAddProductFormSet)
+    formset = ProductFormSet(request.POST)
+    if formset.is_valid():
+        cd = formset.cleaned_data
+        for item in cd:
+            if item.get('quantity'):
+                cart.add(product_sku=item.get('product_sku'),
+                         quantity=item.get('quantity'))
     return redirect('cart:cart_detail')
 
 
@@ -29,6 +31,12 @@ def cart_remove(request, sku):
     return redirect('cart:cart_detail')
 
 
+def cart_delete(request):
+    cart = Cart(request)
+    cart.clear()
+    return redirect('core:home')
+
+
 class CartView(TemplateView):
 
     template_name = 'cart/cart.html'
@@ -36,5 +44,10 @@ class CartView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['cart'] = Cart(self.request)
+        # for item in context['cart']:
+        #     item['update_quantity_form'] = CartUpdateQuantityForm(initial={
+        #     'quantity': item['quantity'],
+        #     'override': True})
+
         context['title'] = 'Корзина'
         return context

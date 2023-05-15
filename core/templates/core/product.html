@@ -24,15 +24,25 @@
       </tr>
       <tr>
         <th scope="row">КБЖУ</th>
-        <td>калорийность: {{ product.productdetail.calories|floatformat }} ккал<br>белки: {{ product.productdetail.proteins|floatformat }} г<br> 
-          жиры: {{ product.productdetail.fats|floatformat }} г<br>углеводы: {{ product.productdetail.carbohydrates|floatformat }} г</td>
+        <td>калорийность: {{ product.productdetail.calories|floatformat }} ккал<br>
+            белки: {{ product.productdetail.proteins|floatformat }} г<br> 
+            жиры: {{ product.productdetail.fats|floatformat }} г<br>
+            углеводы: {{ product.productdetail.carbohydrates|floatformat }} г
+        </td>
       </tr>
     </tbody>
 </table>
+<div class="container">
 <form action="{% url "cart:cart_add" %}" method="post">
-  {{ cart_product_form }}
+  {{ management_form }}
+  <ul>
+    {% for label, form in cart_add_formset_with_labels %}
+      <li>{{ label }} {{ form }}</li>
+    {% endfor %}
+  </ul>
   {% csrf_token %}
   <input type="submit" value="Добавить в корзину">
  </form>
+</div>
  
 {% endblock %}
