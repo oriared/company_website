@@ -1,0 +1,15 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+
+{% block cooperation_content %}
+{% endblock %}
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <p><input type="checkbox" required checked> Соглашаюсь с политикой обработки персональных данных</p>
+    <p><input type="submit" value="Отправить"></p>
+</form>
+
+{% endblock %}

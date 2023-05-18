@@ -25,6 +25,7 @@ from config import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('cart/', include('cart.urls', namespace='cart')),
+    path('cooperation/', include('cooperation.urls', namespace='cooperation')),
     path('', include('core.urls', namespace='core')),
 ]
 
