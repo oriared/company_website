@@ -6,4 +6,5 @@ from .models import Cooperation
 class CooperationAdmin(admin.ModelAdmin):
     list_display = ('subject', 'company', 'city', 'created')
     list_filter = ('subject',)
-    readonly_fields = ('subject', 'company', 'city', 'text', 'person', 'phone', 'email', 'file', 'created')
+    readonly_fields = ('subject', 'company', 'city', 'text', 'person',
+                       'phone', 'email', 'file', 'created')

@@ -42,14 +42,14 @@ class ProductView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         product = Product.objects.get(slug=self.kwargs.get('slug'))
-        ProductFormSet = formset_factory(CartAddProductForm, 
+        ProductFormSet = formset_factory(CartAddProductForm,
                                          formset=BaseAddProductFormSet,
                                          extra=0)
         initial = [dict(product_sku=item.sku) for item in product.packaging.all()]
         formset = ProductFormSet(initial=initial)
         labels = [f'Вес: {item.weight} г., в коробке {item.packaging} шт.,'
                   f'общий вес {item.get_package_weight()} г.'
-                   for item in product.packaging.all()]
+                  for item in product.packaging.all()]
         context['cart_add_formset_with_labels'] = zip(labels, formset)
         context['management_form'] = formset.management_form
         context['title'] = product.name

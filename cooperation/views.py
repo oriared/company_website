@@ -6,7 +6,7 @@ from .email import email_from_form
 
 
 class CooperationCreateView(CreateView):
-    template_name = 'cooperation/base_cooperation.html'
+
     model = Cooperation
     fields = ('company', 'person', 'phone', 'email', 'city', 'text', 'file')
     success_url = reverse_lazy('core:home')
@@ -18,7 +18,6 @@ class CooperationCreateView(CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = self.kwargs.get('type')
-        context['type'] = self.kwargs.get('type')
         return context
 
     def form_valid(self, form):

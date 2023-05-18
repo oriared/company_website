@@ -16,7 +16,17 @@
 </head>
 <body>
 <div class="row">
-  <div class="col-2 bg-dark">
+  <div class="col-2 bg-dark" style="padding-top: 2%;">
+    <div class="d-grid gap-1 col-5 mx-auto">
+      {% with total_items=cart|length %}
+        {% if total_items > 0 %}
+          <a href="{% url "cart:cart_detail" %}">
+        {% endif %}
+            <button type="button" class="btn btn-outline-light">Корзина: {{ total_items }}</button>
+          </a>
+        
+      {% endwith %}
+    </div>
   {% block menu %}
     <div class="btn-group-vertical d-grid gap-1 mx-auto" style="padding-top: 25%;" role="group" aria-label="Vertical button group">
         <a type="button" class="btn btn-outline-light" href="{% url 'core:home' %}" role="button">Главная</a>
@@ -47,8 +57,8 @@
               Сотрудничество
             </button>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="{% url 'cooperation:cooperation' 'distribution' %}">Дистрибьюция </a></li>
-              <li><a class="dropdown-item" href="{% url 'cooperation:cooperation' 'private_label' %}">Private label</a></li>
+              <li><a class="dropdown-item" href="{% url 'cooperation:distribution' %}">Дистрибьюция </a></li>
+              <li><a class="dropdown-item" href="{% url 'cooperation:private_label' %}">Private label</a></li>
               <li><a class="dropdown-item" href="#">Поставщикам</a></li>
               <li><a class="dropdown-item" href="#">Тендеры</a></li>
             </ul>
