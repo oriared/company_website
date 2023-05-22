@@ -1,5 +1,7 @@
 {% extends 'core/base.html' %}
 {% load static %}
+{% load weight_converter %}
+
 {% block content %}
 
 <h2>{{ product.name }}</h2>
@@ -36,8 +38,8 @@
 <form action="{% url "cart:cart_add" %}" method="post">
   {{ management_form }}
   <ul>
-    {% for label, form in cart_add_formset_with_labels %}
-      <li>{{ label }} {{ form }}</li>
+    {% for packaging, form in cart_add_formset_with_packagings %}
+      <li>Вес: {{ packaging.weight | convert_weight }}, в коробке {{ packaging.packaging }} шт, общий вес {{ packaging.get_package_weight | convert_weight }} {{ form }}</li>
     {% endfor %}
   </ul>
   {% csrf_token %}

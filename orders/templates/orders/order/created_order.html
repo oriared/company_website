@@ -1,0 +1,11 @@
+{% extends 'core/base.html' %}
+{% load weight_converter %}
+
+{% block content %}
+  <h2>Заказ успешно оформлен!</h2>
+  {% for item in order.items.all %}
+    <p>{{ item.product_sku.product.name }}, {{ item.product_sku.weight | convert_weight }}: {{ item.quantity }} коробок общим весом {{ item.get_total_weight | convert_weight }}</p>
+  {% endfor %}
+  <p>Ваш комментарий: {{ order.comment }}</p>
+
+{% endblock %}

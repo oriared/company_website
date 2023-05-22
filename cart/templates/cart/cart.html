@@ -1,5 +1,6 @@
 {% extends 'core/base.html' %}
 {% load static %}
+{% load weight_converter %}
 
 {% block content %}
   <h1>Ваша корзина</h1>
@@ -25,11 +26,11 @@
             </a>
           </td>
           <td>{{ item.product.name }}</td>
-          <td>{{ item.packaging.weight }} г.</td>
+          <td>{{ item.packaging.weight | convert_weight }}</td>
           <td>{{ item.packaging.packaging }} шт</td>
-          <td>{{ item.packaging.get_package_weight }} г.</td>
+          <td>{{ item.packaging.get_package_weight | convert_weight }}</td>
           <td>{{ item.quantity }} шт</td>
-          <td>{{ item.total_weight }} г.</td>
+          <td>{{ item.total_weight | convert_weight }}</td>
           <td>
             <form action="{% url "cart:cart_remove" item.packaging.sku %}" method="post">
               <input type="submit" value="Удалить">
@@ -41,8 +42,9 @@
     </tbody>
   </table>
   <p class="text-right">
-    <a href="{% url "core:home" %}" class="button
-    light">В каталог</a>
-    <a href="#" class="button">Оформить</a>
+    <a href="{% url "core:home" %}" class="button light">В каталог</a>
+    {% if cart %}
+    <a href="{% url "orders:create" %}" class="button">Оформить</a>
+    {% endif %}
   </p>
 {% endblock %}

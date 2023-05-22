@@ -32,18 +32,11 @@ def cart_remove(request, sku):
     return redirect('cart:cart_detail')
 
 
-def cart_delete(request):
-    cart = Cart(request)
-    cart.clear()
-    return redirect('core:home')
-
-
 class CartView(TemplateView):
 
     template_name = 'cart/cart.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['cart'] = Cart(self.request)
         context['title'] = 'Корзина'
         return context

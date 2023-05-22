@@ -20,7 +20,7 @@ class Product(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('product', args=(self.slug,))
+        return reverse('core:product', args=(self.slug,))
 
     def display_category(self):
         return self.type.category
@@ -107,7 +107,7 @@ class Category(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('category', args=(self.slug,))
+        return reverse('core:category', args=(self.slug,))
 
     class Meta:
         verbose_name = 'Категория'

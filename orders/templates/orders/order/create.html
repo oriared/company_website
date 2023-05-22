@@ -1,0 +1,22 @@
+{% extends 'core/base.html' %}
+{% load weight_converter %}
+
+{% block content %}
+<h2>Оформление заказа</h2>
+Вы заказываете {{ cart | length }} позиций:
+<ul></ul>
+  {% for item in cart %}
+    <li>
+      {{ item.product.name }}, {{ item.packaging.weight | convert_weight }}.: итого {{ item.total_weight | convert_weight }}
+    </li>
+  {% endfor %}
+</ul>
+<br>
+
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <p><input type="checkbox" required checked> Соглашаюсь с политикой обработки персональных данных</p>
+    <p><input type="submit" value="Оформить заказ"></p>
+  </form>
+{% endblock %}

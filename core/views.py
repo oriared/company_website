@@ -47,10 +47,8 @@ class ProductView(DetailView):
                                          extra=0)
         initial = [dict(product_sku=item.sku) for item in product.packaging.all()]
         formset = ProductFormSet(initial=initial)
-        labels = [f'Вес: {item.weight} г., в коробке {item.packaging} шт.,'
-                  f'общий вес {item.get_package_weight()} г.'
-                  for item in product.packaging.all()]
-        context['cart_add_formset_with_labels'] = zip(labels, formset)
+        packagings = product.packaging.all()
+        context['cart_add_formset_with_packagings'] = zip(packagings, formset)
         context['management_form'] = formset.management_form
         context['title'] = product.name
         return context

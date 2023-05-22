@@ -37,7 +37,7 @@ class Cart:
             yield item
 
     def __len__(self):
-        return sum(item['quantity'] for item in self.cart.values())
+        return len(self.cart)
 
     def clear(self):
         del self.session[settings.CART_SESSION_ID]
