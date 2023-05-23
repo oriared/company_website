@@ -107,7 +107,7 @@ class Category(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('core:category', args=(self.slug,))
+        return reverse('core:products', args=(self.slug,))
 
     class Meta:
         verbose_name = 'Категория'
@@ -117,7 +117,7 @@ class Category(models.Model):
 
 class Carousel(models.Model):
     description = models.CharField(max_length=100, verbose_name='Описание')
-    image = models.ImageField(upload_to='images/carousel/', 
+    image = models.ImageField(upload_to='images/carousel/',
                               verbose_name='Изображение')
     is_active = models.BooleanField(default=True, verbose_name='Виден всем')
 

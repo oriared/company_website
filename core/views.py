@@ -14,17 +14,17 @@ class HomePageView(TemplateView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Главная'
         context['carousel'] = Carousel.objects.filter(is_active=True)
-        context['news'] = []
         return context
 
 
-class CategoryView(ListView):
+class ProductsListView(ListView):
 
     template_name = 'core/category.html'
     context_object_name = 'products'
 
     def get_queryset(self):
-        return Product.objects.filter(is_published=True, type__category__slug=self.kwargs['slug'])
+        return Product.objects.filter(is_published=True,
+                                      type__category__slug=self.kwargs['slug'])
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -45,9 +45,9 @@ class ProductView(DetailView):
         ProductFormSet = formset_factory(CartAddProductForm,
                                          formset=BaseAddProductFormSet,
                                          extra=0)
-        initial = [dict(product_sku=item.sku) for item in product.packaging.all()]
-        formset = ProductFormSet(initial=initial)
         packagings = product.packaging.all()
+        initial = [dict(product_sku=item.sku) for item in packagings]
+        formset = ProductFormSet(initial=initial)
         context['cart_add_formset_with_packagings'] = zip(packagings, formset)
         context['management_form'] = formset.management_form
         context['title'] = product.name

@@ -24,7 +24,7 @@
         <div class="row row-cols row-cols-md-6 g-4">
                 {% for cat in categories %}
                 <div class="col">
-                    <a href="{% url 'core:category' cat.slug %}">
+                    <a href="{% url 'core:products' cat.slug %}">
                         <div class="card h-100 text-center">
                             <img src="{{ cat.image.url }}" class="card-img-top" alt="{{ cat }}">
                             <div class="card-body">

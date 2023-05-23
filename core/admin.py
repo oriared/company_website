@@ -16,11 +16,11 @@ class ProductPackagingInline(admin.StackedInline):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'type', 'is_published')
-    list_display_links = ('name', 'type')
+    list_display = ('name', 'display_category', 'type', 'is_published')
+    list_display_links = ('name',)
     fields = ('name', 'slug', 'type', 'image', ('is_gost', 'is_published'))
     search_fields = ('name',)
-    list_filter = ('is_published',)
+    list_filter = ('is_published', 'type__category')
     prepopulated_fields = {'slug': ('name',)}
     inlines = [ProductDetailInline, ProductPackagingInline]
 

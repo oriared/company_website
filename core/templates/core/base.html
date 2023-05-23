@@ -47,7 +47,7 @@
             </button>
             <ul class="dropdown-menu">
               {% for item in categories %}
-              <li><a class="dropdown-item" href="{% url 'core:category' item.slug %}">{{ item }}</a></li>
+              <li><a class="dropdown-item" href="{% url 'core:products' item.slug %}">{{ item }}</a></li>
               {% endfor %}
             </ul>
         </div>

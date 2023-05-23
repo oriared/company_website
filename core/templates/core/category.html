@@ -6,7 +6,7 @@
     <li class="nav-item">
       <a class="nav-link {% if products.first.type.category == cat %}active" 
       aria-current="page{% endif %}" style="color: red;" 
-      href="{% url 'core:category' cat.slug %}">{{ cat }}</a>
+      href="{% url 'core:products' cat.slug %}">{{ cat }}</a>
     </li>
     {% endfor %}
   </ul>
