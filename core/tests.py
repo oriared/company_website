@@ -1,4 +1,4 @@
-from django.test import TestCase, Client
+from django.test import TestCase
 from django.urls import reverse
 
 from .factories import CategoryFactory, ProductFactory
@@ -7,7 +7,6 @@ from .models import Category
 
 class HomePageTest(TestCase):
     def setUp(self):
-        self.client = Client()
         for _ in range(10):
             CategoryFactory()
 
@@ -20,7 +19,6 @@ class HomePageTest(TestCase):
 
 class CategoryTest(TestCase):
     def setUp(self):
-        self.client = Client()
         self.product = ProductFactory()
         self.category = self.product.type.category
 
@@ -37,7 +35,6 @@ class CategoryTest(TestCase):
 
 class ProductTest(TestCase):
     def setUp(self):
-        self.client = Client()
         self.product = ProductFactory()
 
     def test_product_view(self):
