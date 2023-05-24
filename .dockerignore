@@ -1,0 +1,11 @@
+Dockerfile
+.dockerignore
+.gitignore
+.env.example
+
+.git/
+venv/
+
+media/
+
+db.sqlite3
