@@ -17,6 +17,10 @@ class Cart:
         self.cart[product_sku]['quantity'] += quantity
         self.save()
 
+    def update(self, product_sku, quantity):
+        self.cart[product_sku]['quantity'] = quantity
+        self.save()
+
     def save(self):
         self.session.modified = True
 

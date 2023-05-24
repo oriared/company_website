@@ -9,6 +9,11 @@ class CartAddProductForm(forms.Form):
     product_sku = forms.CharField(widget=forms.HiddenInput)
 
 
+class CartUpdateProductForm(forms.Form):
+    quantity = forms.IntegerField(label='', min_value=1, max_value=999)
+    product_sku = forms.CharField(widget=forms.HiddenInput)
+
+
 class BaseAddProductFormSet(BaseFormSet):
     def clean(self):
         if any(self.errors):

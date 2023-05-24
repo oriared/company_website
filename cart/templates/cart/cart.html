@@ -29,7 +29,13 @@
           <td>{{ item.packaging.weight | convert_weight }}</td>
           <td>{{ item.packaging.packaging }} шт</td>
           <td>{{ item.packaging.get_package_weight | convert_weight }}</td>
-          <td>{{ item.quantity }} шт</td>
+          <td>
+            <form action="{% url "cart:cart_update" %}" method="post">
+              {{ item.update_quantity_form.as_div }}
+              <input type="submit" value="Изменить">
+              {% csrf_token %}
+            </form>
+          </td>
           <td>{{ item.total_weight | convert_weight }}</td>
           <td>
             <form action="{% url "cart:cart_remove" item.packaging.sku %}" method="post">
