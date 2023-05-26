@@ -5,7 +5,9 @@ from django.views.generic import TemplateView
 
 from .cart import Cart
 
-from cart.forms import CartAddProductForm, CartUpdateProductForm, BaseAddProductFormSet
+from cart.forms import (CartAddProductForm,
+                        CartUpdateProductForm,
+                        BaseAddProductFormSet)
 
 
 @require_POST
