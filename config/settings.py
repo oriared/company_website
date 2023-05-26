@@ -84,7 +84,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 
-if config('MODE') == 'prod':
+if config('MODE', default='dev') == 'prod':
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
