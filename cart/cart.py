@@ -37,7 +37,8 @@ class Cart:
             cart[package.sku]['packaging'] = package
             cart[package.sku]['product'] = package.product
         for item in cart.values():
-            item['total_weight'] = item['packaging'].get_package_weight() * item['quantity']
+            item['total_weight'] = item['packaging'].get_package_weight() * \
+                item['quantity']
             yield item
 
     def __len__(self):

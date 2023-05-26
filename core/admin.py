@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from .models import Product, ProductType, Category, ProductDetail, ProductPackaging, Carousel
+from .models import (Product, ProductType, Category,
+                     ProductDetail, ProductPackaging, Carousel)
 
 
 class ProductDetailInline(admin.StackedInline):

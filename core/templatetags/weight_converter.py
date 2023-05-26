@@ -2,6 +2,7 @@ from django import template
 
 register = template.Library()
 
+
 @register.filter
 def convert_weight(weight):
     if weight % 1000 == 0:

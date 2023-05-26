@@ -25,8 +25,9 @@ class OrderCreateView(CreateView):
         cart = Cart(self.request)
         self.object = form.save()
         for item in cart:
+            sku = ProductPackaging.objects.get(sku=item['packaging'])
             OrderItem.objects.create(order=self.object,
-                                     product_sku=ProductPackaging.objects.get(sku=item['packaging']),
+                                     product_sku=sku,
                                      quantity=item['quantity'])
         cart.clear()
         return super().form_valid(form)
