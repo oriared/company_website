@@ -8,6 +8,7 @@ class ProductDetailInline(admin.StackedInline):
     model = ProductDetail
     fields = ('description', 'conditions', ('storage_time', 'storage_time_units'),
               'calories', ('proteins', 'fats', 'carbohydrates'))
+    radio_fields = {'storage_time_units': admin.VERTICAL}
 
 
 class ProductPackagingInline(admin.StackedInline):

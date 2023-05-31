@@ -50,8 +50,8 @@ class ProductDetail(models.Model):
     description = models.TextField('Описание', blank=True)
     conditions = models.TextField('Условия хранения', blank=True)
     storage_time = models.PositiveIntegerField('Срок хранения')
-    storage_time_units = models.CharField('', max_length=7, choices=CHOICES,
-                                          default='MOUNTHS')
+    storage_time_units = models.CharField('Единицы измерения', max_length=7,
+                                          choices=CHOICES, default='MOUNTHS')
     calories = models.FloatField('Калорийность')
     proteins = models.FloatField('Белки')
     fats = models.FloatField('Жиры')
