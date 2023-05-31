@@ -13,7 +13,7 @@ class HomePageView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Главная'
-        context['carousel'] = Carousel.objects.filter(is_active=True)
+        context['carousel'] = Carousel.published.all()
         return context
 
 
@@ -23,8 +23,7 @@ class ProductsListView(ListView):
     context_object_name = 'products'
 
     def get_queryset(self):
-        return Product.objects.filter(is_published=True,
-                                      type__category__slug=self.kwargs['slug'])
+        return Product.published.filter(type__category__slug=self.kwargs['slug'])
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

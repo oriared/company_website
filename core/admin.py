@@ -40,5 +40,5 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Carousel)
 class CarouselAdmin(admin.ModelAdmin):
-    list_display = ('description', 'is_active')
-    list_filter = ('is_active',)
+    list_display = ('description', 'is_published')
+    list_filter = ('is_published',)

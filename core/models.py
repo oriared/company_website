@@ -4,6 +4,11 @@ from django.urls import reverse
 from core.utils import path_category_image, path_product_image
 
 
+class PublishedManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(is_published=True)
+
+
 class Product(models.Model):
     name = models.CharField('Наименование', max_length=255)
     slug = models.SlugField('URL', max_length=255, unique=True)
@@ -13,6 +18,9 @@ class Product(models.Model):
                               default='images/default.jpg')
     is_gost = models.BooleanField('Соответствует ГОСТ')
     is_published = models.BooleanField('Доступен', default=True)
+
+    objects = models.Manager()
+    published = PublishedManager()
 
     def __str__(self):
         return self.name
@@ -100,6 +108,9 @@ class Category(models.Model):
                               default='images/default.jpg')
     is_published = models.BooleanField('Видимость', default=True)
 
+    objects = models.Manager()
+    published = PublishedManager()
+
     def __str__(self):
         return self.name
 
@@ -115,7 +126,10 @@ class Category(models.Model):
 class Carousel(models.Model):
     description = models.CharField('Описание', max_length=100)
     image = models.ImageField('Изображение', upload_to='images/carousel/')
-    is_active = models.BooleanField('Видимость', default=True)
+    is_published = models.BooleanField('Видимость', default=True)
+
+    objects = models.Manager()
+    published = PublishedManager()
 
     class Meta:
         verbose_name = 'Карусель'
