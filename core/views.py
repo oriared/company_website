@@ -41,14 +41,15 @@ class ProductView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        product = Product.objects.get(slug=self.kwargs.get('slug'))
-        ProductFormSet = formset_factory(CartAddProductForm,
-                                         formset=BaseAddProductFormSet,
-                                         extra=0)
-        packagings = product.packaging.all()
-        initial = [dict(product_sku=item.sku) for item in packagings]
-        formset = ProductFormSet(initial=initial)
-        context['cart_add_formset_with_packagings'] = zip(packagings, formset)
-        context['management_form'] = formset.management_form
-        context['title'] = product.name
+        if self.request.user.is_authenticated:
+            product = Product.objects.get(slug=self.kwargs.get('slug'))
+            ProductFormSet = formset_factory(CartAddProductForm,
+                                             formset=BaseAddProductFormSet,
+                                             extra=0)
+            packagings = product.packaging.all()
+            initial = [dict(product_sku=item.sku) for item in packagings]
+            formset = ProductFormSet(initial=initial)
+            context['cart_add_formset_with_packagings'] = zip(packagings, formset)
+            context['management_form'] = formset.management_form
+        context['title'] = self.object.name
         return context

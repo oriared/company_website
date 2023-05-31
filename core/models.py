@@ -64,12 +64,16 @@ class ProductPackaging(models.Model):
     sku = models.CharField(max_length=50, unique=True, verbose_name='Артикул')
     weight = models.PositiveIntegerField(verbose_name='Вес, грамм')
     packaging = models.PositiveIntegerField(verbose_name='Вложение, шт')
+    price = models.DecimalField(max_digits=8, decimal_places=2, verbose_name='Цена')
 
     def __str__(self):
         return self.sku
 
     def get_package_weight(self):
         return self.weight * self.packaging
+
+    def get_package_price(self):
+        return self.price * self.packaging
 
     class Meta:
         verbose_name = 'Фасовка'

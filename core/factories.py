@@ -1,3 +1,5 @@
+from django.contrib.auth import get_user_model
+
 import factory
 from faker.factory import Factory
 
@@ -6,6 +8,15 @@ from .models import (Product, ProductDetail, ProductPackaging,
 
 
 factory_ru = Factory.create('ru-Ru')
+
+User = get_user_model()
+
+
+class UserFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = User
+    username = factory.Sequence(lambda n: f"test_user_{n}")
+    email = factory_ru.email()
 
 
 class CategoryFactory(factory.django.DjangoModelFactory):
@@ -62,3 +73,4 @@ class ProductPackagingFactory(factory.django.DjangoModelFactory):
     sku = factory.Sequence(lambda n: f"sku{n}")
     weight = factory_ru.pyint(min_value=100, max_value=1500, step=10)
     packaging = factory_ru.pyint(min_value=10, max_value=40)
+    price = factory_ru.pydecimal(left_digits=3, right_digits=2, positive=True)

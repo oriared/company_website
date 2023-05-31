@@ -3,11 +3,11 @@
 
 {% block content %}
 <h2>Оформление заказа</h2>
-Вы заказываете {{ cart | length }} позиций:
+Вы заказываете {{ request.user.cart.count }} позиций:
 <ul></ul>
-  {% for item in cart %}
+  {% for item in request.user.cart.all %}
     <li>
-      {{ item.product.name }}, {{ item.packaging.weight | convert_weight }}.: итого {{ item.total_weight | convert_weight }}
+      {{ item.product_sku.product.name }}, {{ item.product_sku.weight | convert_weight }}.: итого {{ item.get_total_weight | convert_weight }}
     </li>
   {% endfor %}
 </ul>

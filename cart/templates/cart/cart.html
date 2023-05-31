@@ -9,36 +9,40 @@
       <tr>
       <th>Фото</th>
       <th>Товар</th>
-      <th>Вес единицы</th>
+      <th>Вес</th>
+      <th>Цена</th>
       <th>Вложений в упаковке</th>
       <th>Вес упаковки</th>
       <th>Кол-во упаковок</th>
       <th>Общий вес</th>
+      <th>Стоимость</th>
       <th>Удалить</th>
       </tr>
     </thead>
     <tbody>
-      {% for item in cart %}
+      {% for item in request.user.cart.all %}
         <tr>
           <td>
-            <a href="{% url "core:product" item.product.slug %}">
-              <img src="{{ item.product.image.url }}" height="80px">
+            <a href="{% url "core:product" item.product_sku.product.slug %}">
+              <img src="{{ item.product_sku.product.image.url }}" height="80px">
             </a>
           </td>
-          <td>{{ item.product.name }}</td>
-          <td>{{ item.packaging.weight | convert_weight }}</td>
-          <td>{{ item.packaging.packaging }} шт</td>
-          <td>{{ item.packaging.get_package_weight | convert_weight }}</td>
+          <td>{{ item.product_sku.product.name }}</td>
+          <td>{{ item.product_sku.weight | convert_weight }}</td>
+          <td>{{ item.product_sku.price }}</td>
+          <td>{{ item.product_sku.packaging }} шт</td>
+          <td>{{ item.product_sku.get_package_weight | convert_weight }}</td>
           <td>
-            <form action="{% url "cart:cart_update" %}" method="post">
-              {{ item.update_quantity_form.as_div }}
+            <form action="{% url "cart:cart_update" item.product_sku.sku %}" method="post">
+              {{ item.get_update_form.as_p }}
               <input type="submit" value="Изменить">
               {% csrf_token %}
             </form>
           </td>
-          <td>{{ item.total_weight | convert_weight }}</td>
+          <td>{{ item.get_total_weight | convert_weight }}</td>
+          <td>{{ item.get_total_price }}</td>
           <td>
-            <form action="{% url "cart:cart_remove" item.packaging.sku %}" method="post">
+            <form action="{% url "cart:cart_remove" item.product_sku.sku %}" method="post">
               <input type="submit" value="Удалить">
               {% csrf_token %}
             </form>
@@ -47,9 +51,10 @@
       {% endfor %}
     </tbody>
   </table>
+  <p>Итого: {{ total_price }}</p>
   <p class="text-right">
     <a href="{% url "core:home" %}" class="button light">В каталог</a>
-    {% if cart %}
+    {% if request.user.cart.count %}
     <a href="{% url "orders:create" %}" class="button">Оформить</a>
     {% endif %}
   </p>

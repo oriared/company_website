@@ -1,20 +1,21 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView
 
+from cart.models import Cart
 from core.models import ProductPackaging
 from .models import Order, OrderItem
-from cart.cart import Cart
+from .utils import send_order_email
 
 
-class OrderCreateView(CreateView):
+class OrderCreateView(LoginRequiredMixin, CreateView):
 
     template_name = 'orders/order/create.html'
     model = Order
-    fields = ('company', 'name', 'phone', 'email', 'city', 'comment')
-    success_url = reverse_lazy('orders:created', kwargs={})
+    fields = ('comment',)
 
     def get_success_url(self):
-        return reverse_lazy('orders:created', args=(self.object.uuid,))
+        return reverse_lazy('orders:created', args=(self.object.pk,))
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -22,20 +23,25 @@ class OrderCreateView(CreateView):
         return context
 
     def form_valid(self, form):
-        cart = Cart(self.request)
-        self.object = form.save()
-        for item in cart:
-            sku = ProductPackaging.objects.get(sku=item['packaging'])
+        self.object = form.save(commit=False)
+        self.object.user = self.request.user
+        self.object.save()
+        for item in Cart.objects.filter(user=self.request.user):
+            sku = ProductPackaging.objects.get(sku=item.product_sku)
             OrderItem.objects.create(order=self.object,
                                      product_sku=sku,
-                                     quantity=item['quantity'])
-        cart.clear()
+                                     quantity=item.quantity)
+        send_order_email(order=self.object)
+        Cart.objects.filter(user=self.request.user).delete()
         return super().form_valid(form)
 
 
-class CreatedOrderView(DetailView):
+class CreatedOrderView(LoginRequiredMixin, DetailView):
 
     template_name = 'orders/order/created_order.html'
     model = Order
-    slug_field = 'uuid'
-    slug_url_kwarg = 'uuid'
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user != self.get_object().user:
+            return super().handle_no_permission()
+        return super().dispatch(request, *args, **kwargs)

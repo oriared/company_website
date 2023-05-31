@@ -18,14 +18,22 @@
 <div class="row">
   <div class="col-2 bg-dark" style="padding-top: 2%;">
     <div class="d-grid gap-1 col-5 mx-auto">
-      {% with total_items=cart|length %}
+      <ul>
+      {% if request.user.is_authenticated %}
+      <li>
+      {% with total_items=request.user.cart.count %}
         {% if total_items > 0 %}
           <a href="{% url "cart:cart_detail" %}">
         {% endif %}
             <button type="button" class="btn btn-outline-light">Корзина: {{ total_items }}</button>
           </a>
-        
+        </li>
+        <li><a href="{% url "logout" %}">Выход</a></li>
       {% endwith %}
+      {% else %}
+        <a href="{% url "login" %}">Вход</a>
+      {% endif %}
+    </ul>
     </div>
   {% block menu %}
     <div class="btn-group-vertical d-grid gap-1 mx-auto" style="padding-top: 25%;" role="group" aria-label="Vertical button group">

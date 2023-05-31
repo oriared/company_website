@@ -1,17 +1,16 @@
-import uuid
-
+from django.contrib.auth import get_user_model
 from django.db import models
 
 from core.models import ProductPackaging
 
+User = get_user_model()
+
 
 class Order(models.Model):
-    uuid = models.UUIDField(default=uuid.uuid4())
-    company = models.CharField(max_length=100, verbose_name='Компания')
-    name = models.CharField(max_length=50, verbose_name='ФИО')
-    email = models.EmailField()
-    phone = models.CharField(max_length=10, verbose_name='Телефон')
-    city = models.CharField(max_length=100, verbose_name='Город')
+    user = models.ForeignKey(User,
+                             related_name='order',
+                             on_delete=models.CASCADE,
+                             verbose_name='Клиент')
     comment = models.TextField(max_length=1000, blank=True, verbose_name='Комментарий')
     created = models.DateTimeField(auto_now_add=True, verbose_name='Создан')
     updated = models.DateTimeField(auto_now=True, verbose_name='Изменён')
@@ -32,6 +31,10 @@ class OrderItem(models.Model):
     product_sku = models.ForeignKey(ProductPackaging, related_name='order_items',
                                     null=True, on_delete=models.SET_NULL)
     quantity = models.PositiveIntegerField(default=1)
+
+    class Meta():
+        verbose_name = 'Товар'
+        verbose_name_plural = 'Товары'
 
     def get_total_weight(self):
         return self.product_sku.get_package_weight() * self.quantity

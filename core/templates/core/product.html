@@ -34,17 +34,19 @@
       </tr>
     </tbody>
 </table>
+{% if request.user.is_authenticated %}
 <div class="container">
 <form action="{% url "cart:cart_add" %}" method="post">
   {{ management_form }}
   <ul>
     {% for packaging, form in cart_add_formset_with_packagings %}
-      <li>Вес: {{ packaging.weight | convert_weight }}, в коробке {{ packaging.packaging }} шт, общий вес {{ packaging.get_package_weight | convert_weight }} {{ form }}</li>
+      <li>Вес: {{ packaging.weight | convert_weight }}, в коробке {{ packaging.packaging }} шт, общий вес {{ packaging.get_package_weight | convert_weight }}. Цена: {{ packaging.get_package_price }} {{ form }}</li>
     {% endfor %}
   </ul>
   {% csrf_token %}
   <input type="submit" value="Добавить в корзину">
  </form>
 </div>
+{% endif %}
  
 {% endblock %}
