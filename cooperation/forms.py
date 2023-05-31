@@ -1,5 +1,5 @@
 from django import forms
-from .models import Cooperation
+from cooperation.models import Cooperation
 
 
 class CooperationForm(forms.ModelForm):

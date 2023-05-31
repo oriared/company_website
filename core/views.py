@@ -2,7 +2,7 @@ from django.forms import formset_factory
 from django.views.generic import ListView, DetailView
 from django.views.generic.base import TemplateView
 
-from .models import Product, Category, Carousel
+from core.models import Product, Category, Carousel
 from cart.forms import CartAddProductForm, BaseAddProductFormSet
 
 

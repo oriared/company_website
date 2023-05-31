@@ -5,7 +5,7 @@ from django.shortcuts import redirect
 from django.views.decorators.http import require_POST
 from django.views.generic import ListView
 
-from .models import Cart
+from cart.models import Cart
 from cart.forms import CartAddProductForm, CartUpdateProductForm, BaseAddProductFormSet
 from core.models import ProductPackaging
 

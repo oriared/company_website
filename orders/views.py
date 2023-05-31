@@ -4,8 +4,8 @@ from django.views.generic import CreateView, DetailView
 
 from cart.models import Cart
 from core.models import ProductPackaging
-from .models import Order, OrderItem
-from .utils import send_order_email
+from orders.models import Order, OrderItem
+from orders.utils import send_order_email
 
 
 class OrderCreateView(LoginRequiredMixin, CreateView):

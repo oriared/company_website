@@ -26,7 +26,10 @@ class CartViewsTest(TestCase):
                 'form-0-quantity': [''], 'form-0-product_sku': ['123ABC'],
                 'form-1-quantity': [''], 'form-1-product_sku': ['234FFF'],
                 'form-2-quantity': ['3'], 'form-2-product_sku': [self.packaging.sku]}
+
         response = self.client.post(reverse('cart:cart_add'), data=data)
+
         c = Cart.objects.filter(user=self.user).first().product_sku.sku
+
         self.assertEqual(c, 'sku0')
         self.assertEqual(response.url, '/cart/')

@@ -1,4 +1,4 @@
-from .models import Category
+from core.models import Category
 
 
 def categories(request):

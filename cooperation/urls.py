@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import CooperationCreateView
+from cooperation.views import CooperationCreateView
 
 app_name = 'cooperation'
 

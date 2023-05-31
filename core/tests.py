@@ -1,8 +1,8 @@
 from django.test import TestCase
 from django.urls import reverse
 
-from .factories import CategoryFactory, ProductFactory
-from .models import Category
+from core.factories import CategoryFactory, ProductFactory
+from core.models import Category
 
 
 class HomePageTest(TestCase):

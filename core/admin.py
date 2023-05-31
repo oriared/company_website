@@ -1,7 +1,7 @@
 from django.contrib import admin
 
-from .models import (Product, ProductType, Category,
-                     ProductDetail, ProductPackaging, Carousel)
+from core.models import (Product, ProductType, Category,
+                         ProductDetail, ProductPackaging, Carousel)
 
 
 class ProductDetailInline(admin.StackedInline):
@@ -12,7 +12,7 @@ class ProductDetailInline(admin.StackedInline):
 
 class ProductPackagingInline(admin.StackedInline):
     model = ProductPackaging
-    fields = (('sku', 'weight', 'packaging'),)
+    fields = (('sku', 'weight', 'packaging', 'price'),)
 
 
 @admin.register(Product)
@@ -23,7 +23,7 @@ class ProductAdmin(admin.ModelAdmin):
     search_fields = ('name',)
     list_filter = ('is_published', 'type__category')
     prepopulated_fields = {'slug': ('name',)}
-    inlines = [ProductDetailInline, ProductPackagingInline]
+    inlines = (ProductDetailInline, ProductPackagingInline)
 
 
 @admin.register(ProductType)

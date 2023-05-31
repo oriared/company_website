@@ -1,8 +1,8 @@
 from django.views.generic.edit import CreateView
 from django.urls import reverse_lazy
 
-from .models import Cooperation
-from .email import email_from_form
+from cooperation.models import Cooperation
+from cooperation.utils import email_from_form
 
 
 class CooperationCreateView(CreateView):

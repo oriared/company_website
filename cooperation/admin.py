@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Cooperation
+from cooperation.models import Cooperation
 
 
 @admin.register(Cooperation)

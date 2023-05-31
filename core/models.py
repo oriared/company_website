@@ -1,28 +1,26 @@
 from django.db import models
 from django.urls import reverse
 
-from .utils import path_category_image, path_product_image
+from core.utils import path_category_image, path_product_image
 
 
 class Product(models.Model):
-    name = models.CharField(max_length=255, verbose_name='Наименование')
-    slug = models.SlugField(max_length=255, unique=True, db_index=True,
-                            verbose_name='URL')
-    type = models.ForeignKey('ProductType', on_delete=models.PROTECT,
-                             verbose_name='Тип')
-    image = models.ImageField(upload_to=path_product_image,
-                              default='images/default.jpg',
-                              verbose_name='Фото')
-    is_gost = models.BooleanField(verbose_name='Произведён по ГОСТ')
-    is_published = models.BooleanField(default=True, verbose_name='Виден всем')
+    name = models.CharField('Наименование', max_length=255)
+    slug = models.SlugField('URL', max_length=255, unique=True)
+    type = models.ForeignKey('ProductType', verbose_name='Тип',
+                             on_delete=models.PROTECT)
+    image = models.ImageField('Фото', upload_to=path_product_image,
+                              default='images/default.jpg')
+    is_gost = models.BooleanField('Соответствует ГОСТ')
+    is_published = models.BooleanField('Доступен', default=True)
 
     def __str__(self):
         return self.name
 
-    def get_absolute_url(self):
-        return reverse('core:product', args=(self.slug,))
+    def get_absolute_url(self) -> str:
+        return reverse('core:product', kwargs={'slug': self.slug})
 
-    def display_category(self):
+    def display_category(self) -> str:
         return self.type.category
 
     display_category.short_description = 'Категория'
@@ -30,27 +28,26 @@ class Product(models.Model):
     class Meta:
         verbose_name = 'Товар'
         verbose_name_plural = 'Товары'
-        ordering = ['name']
-        indexes = [models.Index(fields=['slug'])]
+        ordering = ('name',)
 
 
 class ProductDetail(models.Model):
-    class Units(models.TextChoices):
-        DAYS = 'D', 'дней'
-        MOUNTHS = 'M', 'мес'
+    CHOICES = (
+        ('DAYS', 'дней'),
+        ('MOUNTHS', 'мес')
+    )
 
-    product = models.OneToOneField('Product', on_delete=models.CASCADE,
-                                   null=True, verbose_name="Товар")
-    description = models.TextField(blank=True, verbose_name='Описание')
-    conditions = models.TextField(blank=True, verbose_name='Условия хранения')
-    storage_time = models.PositiveIntegerField(verbose_name='Срок хранения')
-    storage_time_units = models.CharField(max_length=1, choices=Units.choices,
-                                          default=Units.MOUNTHS,
-                                          verbose_name='')
-    calories = models.FloatField(verbose_name='Калорийность')
-    proteins = models.FloatField(verbose_name='Белки')
-    fats = models.FloatField(verbose_name='Жиры')
-    carbohydrates = models.FloatField(verbose_name='Углеводы')
+    product = models.OneToOneField('Product', verbose_name='Товар',
+                                   null=True, on_delete=models.SET_NULL)
+    description = models.TextField('Описание', blank=True)
+    conditions = models.TextField('Условия хранения', blank=True)
+    storage_time = models.PositiveIntegerField('Срок хранения')
+    storage_time_units = models.CharField('', max_length=7, choices=CHOICES,
+                                          default='MOUNTHS')
+    calories = models.FloatField('Калорийность')
+    proteins = models.FloatField('Белки')
+    fats = models.FloatField('Жиры')
+    carbohydrates = models.FloatField('Углеводы')
 
     class Meta:
         verbose_name = 'Характеристики товара'
@@ -58,21 +55,22 @@ class ProductDetail(models.Model):
 
 
 class ProductPackaging(models.Model):
-    product = models.ForeignKey('Product', on_delete=models.CASCADE,
-                                null=True, related_name='packaging',
-                                verbose_name="Товар")
-    sku = models.CharField(max_length=50, unique=True, verbose_name='Артикул')
-    weight = models.PositiveIntegerField(verbose_name='Вес, грамм')
-    packaging = models.PositiveIntegerField(verbose_name='Вложение, шт')
-    price = models.DecimalField(max_digits=8, decimal_places=2, verbose_name='Цена')
+    product = models.ForeignKey('Product', verbose_name='Товар',
+                                null=True,
+                                on_delete=models.CASCADE,
+                                related_name='packaging')
+    sku = models.CharField('Артикул', max_length=50, unique=True)
+    weight = models.PositiveIntegerField('Вес, грамм')
+    packaging = models.PositiveIntegerField('Вложение, шт')
+    price = models.DecimalField('Цена', max_digits=8, decimal_places=2)
 
     def __str__(self):
         return self.sku
 
-    def get_package_weight(self):
+    def get_package_weight(self) -> int:
         return self.weight * self.packaging
 
-    def get_package_price(self):
+    def get_package_price(self) -> float:
         return self.price * self.packaging
 
     class Meta:
@@ -81,12 +79,10 @@ class ProductPackaging(models.Model):
 
 
 class ProductType(models.Model):
-    name = models.CharField(max_length=100, db_index=True,
-                            verbose_name='Категория')
-    slug = models.SlugField(max_length=255, unique=True,
-                            verbose_name='URL')
-    category = models.ForeignKey('Category', on_delete=models.CASCADE,
-                                 verbose_name='Категория')
+    name = models.CharField('Категория', max_length=100, db_index=True)
+    slug = models.SlugField('URL', max_length=255, unique=True)
+    category = models.ForeignKey('Category', verbose_name='Категория',
+                                 on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
@@ -94,24 +90,21 @@ class ProductType(models.Model):
     class Meta:
         verbose_name = 'Тип товара'
         verbose_name_plural = 'Типы товаров'
-        ordering = ['name']
+        ordering = ('name',)
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=100, db_index=True,
-                            verbose_name='Категория')
-    slug = models.SlugField(max_length=255, unique=True,
-                            db_index=True, verbose_name='URL')
-    image = models.ImageField(upload_to=path_category_image,
-                              default='images/default.jpg',
-                              verbose_name='Фото')
-    is_published = models.BooleanField(default=True, verbose_name='Виден всем')
+    name = models.CharField('Категория', max_length=100)
+    slug = models.SlugField('URL', max_length=255, unique=True)
+    image = models.ImageField('Фото', upload_to=path_category_image,
+                              default='images/default.jpg')
+    is_published = models.BooleanField('Видимость', default=True)
 
     def __str__(self):
         return self.name
 
-    def get_absolute_url(self):
-        return reverse('core:products', args=(self.slug,))
+    def get_absolute_url(self) -> str:
+        return reverse('core:products', kwargs={'slug': self.slug})
 
     class Meta:
         verbose_name = 'Категория'
@@ -120,10 +113,9 @@ class Category(models.Model):
 
 
 class Carousel(models.Model):
-    description = models.CharField(max_length=100, verbose_name='Описание')
-    image = models.ImageField(upload_to='images/carousel/',
-                              verbose_name='Изображение')
-    is_active = models.BooleanField(default=True, verbose_name='Виден всем')
+    description = models.CharField('Описание', max_length=100)
+    image = models.ImageField('Изображение', upload_to='images/carousel/')
+    is_active = models.BooleanField('Видимость', default=True)
 
     class Meta:
         verbose_name = 'Карусель'

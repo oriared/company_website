@@ -1,18 +1,17 @@
 from django.db import models
-from .utils import path_upload_file
+from cooperation.utils import path_upload_file
 
 
 class Cooperation(models.Model):
-    subject = models.CharField(max_length=30, verbose_name='Тема')
-    company = models.CharField(max_length=100, verbose_name='Компания')
-    person = models.CharField(max_length=100, verbose_name='ФИО')
-    phone = models.CharField(max_length=11, verbose_name='Телефон')
-    email = models.EmailField(verbose_name='Email')
-    city = models.CharField(max_length=50, blank=True, verbose_name='Город')
-    text = models.TextField(verbose_name='Текст сообщения')
-    file = models.FileField(upload_to=path_upload_file, blank=True,
-                            verbose_name='Файл')
-    created = models.DateTimeField(auto_now_add=True, verbose_name='Дата')
+    subject = models.CharField('Тема', max_length=30)
+    company = models.CharField('Компания', max_length=100)
+    person = models.CharField('ФИО', max_length=100)
+    phone = models.CharField('Телефон', max_length=11)
+    email = models.EmailField('Email')
+    city = models.CharField('Город', max_length=50, blank=True)
+    text = models.TextField('Текст сообщения')
+    file = models.FileField('Файл', upload_to=path_upload_file, blank=True)
+    created = models.DateTimeField('Дата', auto_now_add=True)
 
     def __str__(self):
         return f'{self.company}: {self.email}'
