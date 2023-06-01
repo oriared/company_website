@@ -3,7 +3,7 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView
 
 from cart.models import Cart
-from core.models import ProductPackaging
+from core.models import ProductPack
 from orders.models import Order, OrderItem
 from orders.utils import send_order_email
 
@@ -15,7 +15,7 @@ class OrderCreateView(LoginRequiredMixin, CreateView):
     fields = ('comment',)
 
     def get_success_url(self):
-        return reverse_lazy('orders:created', args=(self.object.pk,))
+        return reverse_lazy('orders:created', kwargs={'pk': self.object.pk})
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -27,9 +27,8 @@ class OrderCreateView(LoginRequiredMixin, CreateView):
         self.object.user = self.request.user
         self.object.save()
         for item in Cart.objects.filter(user=self.request.user):
-            sku = ProductPackaging.objects.get(sku=item.product_sku)
             OrderItem.objects.create(order=self.object,
-                                     product_sku=sku,
+                                     pack=item.pack,
                                      quantity=item.quantity)
         send_order_email(order=self.object)
         Cart.objects.filter(user=self.request.user).delete()

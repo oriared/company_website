@@ -40,6 +40,7 @@ class Product(models.Model):
 
 
 class ProductDetail(models.Model):
+
     CHOICES = (
         ('DAYS', 'дней'),
         ('MOUNTHS', 'мес')
@@ -62,24 +63,24 @@ class ProductDetail(models.Model):
         verbose_name_plural = 'Характеристики товара'
 
 
-class ProductPackaging(models.Model):
+class ProductPack(models.Model):
     product = models.ForeignKey('Product', verbose_name='Товар',
                                 null=True,
                                 on_delete=models.CASCADE,
-                                related_name='packaging')
+                                related_name='pack')
     sku = models.CharField('Артикул', max_length=50, unique=True)
     weight = models.PositiveIntegerField('Вес, грамм')
-    packaging = models.PositiveIntegerField('Вложение, шт')
+    items_in_box = models.PositiveIntegerField('Вложение, шт')
     price = models.DecimalField('Цена', max_digits=8, decimal_places=2)
 
     def __str__(self):
         return self.sku
 
     def get_package_weight(self) -> int:
-        return self.weight * self.packaging
+        return self.weight * self.items_in_box
 
     def get_package_price(self) -> float:
-        return self.price * self.packaging
+        return self.price * self.items_in_box
 
     class Meta:
         verbose_name = 'Фасовка'

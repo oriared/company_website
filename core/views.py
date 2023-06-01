@@ -36,19 +36,19 @@ class ProductView(DetailView):
     template_name = 'core/product.html'
 
     def get_queryset(self):
-        return Product.objects.filter(is_published=True).select_related('productdetail')
+        return Product.published.select_related('productdetail').all()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.request.user.is_authenticated:
-            product = Product.objects.get(slug=self.kwargs.get('slug'))
+            product = Product.published.get(slug=self.kwargs.get('slug'))
             ProductFormSet = formset_factory(CartAddProductForm,
                                              formset=BaseAddProductFormSet,
                                              extra=0)
-            packagings = product.packaging.all()
-            initial = [dict(product_sku=item.sku) for item in packagings]
+            packs = product.pack.all()
+            initial = tuple(packs.values('sku'))
             formset = ProductFormSet(initial=initial)
-            context['cart_add_formset_with_packagings'] = zip(packagings, formset)
+            context['cart_add_formset_with_packs'] = zip(packs, formset)
             context['management_form'] = formset.management_form
         context['title'] = self.object.name
         return context

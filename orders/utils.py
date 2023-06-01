@@ -11,7 +11,7 @@ def send_order_email(order: Model) -> None:
     buffer = io.StringIO()
     writer = csv.writer(buffer)
     for item in order.items.all():
-        writer.writerow((item.product_sku.sku, item.quantity))
+        writer.writerow((item.pack.sku, item.quantity))
     content = buffer.getvalue()
     buffer.close()
     email_subject = f'Заказ от {order.user.username}'

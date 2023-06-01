@@ -39,8 +39,8 @@
 <form action="{% url "cart:cart_add" %}" method="post">
   {{ management_form }}
   <ul>
-    {% for packaging, form in cart_add_formset_with_packagings %}
-      <li>Вес: {{ packaging.weight | convert_weight }}, в коробке {{ packaging.packaging }} шт, общий вес {{ packaging.get_package_weight | convert_weight }}. Цена: {{ packaging.get_package_price }} {{ form }}</li>
+    {% for pack, form in cart_add_formset_with_packs %}
+      <li>Вес: {{ pack.weight | convert_weight }}, в коробке {{ pack.items_in_box }} шт, общий вес {{ pack.get_package_weight | convert_weight }}. Цена: {{ pack.get_package_price }} {{ form }}</li>
     {% endfor %}
   </ul>
   {% csrf_token %}

@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from core.models import (Product, ProductType, Category,
-                         ProductDetail, ProductPackaging, Carousel)
+                         ProductDetail, ProductPack, Carousel)
 
 
 class ProductDetailInline(admin.StackedInline):
@@ -11,9 +11,9 @@ class ProductDetailInline(admin.StackedInline):
     radio_fields = {'storage_time_units': admin.VERTICAL}
 
 
-class ProductPackagingInline(admin.StackedInline):
-    model = ProductPackaging
-    fields = (('sku', 'weight', 'packaging', 'price'),)
+class ProductPackInline(admin.StackedInline):
+    model = ProductPack
+    fields = (('sku', 'weight', 'items_in_box', 'price'),)
 
 
 @admin.register(Product)
@@ -24,7 +24,7 @@ class ProductAdmin(admin.ModelAdmin):
     search_fields = ('name',)
     list_filter = ('is_published', 'type__category')
     prepopulated_fields = {'slug': ('name',)}
-    inlines = (ProductDetailInline, ProductPackagingInline)
+    inlines = (ProductDetailInline, ProductPackInline)
 
 
 @admin.register(ProductType)

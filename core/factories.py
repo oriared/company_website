@@ -1,7 +1,7 @@
 import factory
 from faker.factory import Factory
 
-from core.models import (Product, ProductDetail, ProductPackaging,
+from core.models import (Product, ProductDetail, ProductPack,
                          ProductType, Category)
 
 
@@ -54,12 +54,12 @@ class ProductDetailFactory(factory.django.DjangoModelFactory):
                                        max_value=50)
 
 
-class ProductPackagingFactory(factory.django.DjangoModelFactory):
+class ProductPackFactory(factory.django.DjangoModelFactory):
     class Meta:
-        model = ProductPackaging
+        model = ProductPack
 
     product = factory.SubFactory(ProductFactory)
     sku = factory.Sequence(lambda n: f"sku{n}")
     weight = factory_ru.pyint(min_value=100, max_value=1500, step=10)
-    packaging = factory_ru.pyint(min_value=10, max_value=40)
+    items_in_box = factory_ru.pyint(min_value=10, max_value=40)
     price = factory_ru.pydecimal(left_digits=3, right_digits=2, positive=True)

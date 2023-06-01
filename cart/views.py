@@ -7,7 +7,7 @@ from django.views.generic import ListView
 
 from cart.models import Cart
 from cart.forms import CartAddProductForm, CartUpdateProductForm, BaseAddProductFormSet
-from core.models import ProductPackaging
+from core.models import ProductPack
 
 
 @login_required
@@ -20,9 +20,9 @@ def cart_add(request):
         cd = formset.cleaned_data
         for item in cd:
             if item.get('quantity'):
-                product_sku = ProductPackaging.objects.get(sku=item.get('product_sku'))
+                pack = ProductPack.objects.get(sku=item.get('sku'))
                 cart, _ = Cart.objects.get_or_create(user=request.user,
-                                                     product_sku=product_sku,
+                                                     pack=pack,
                                                      defaults={'quantity': 0})
                 cart.quantity += item.get('quantity')
                 cart.save()
@@ -36,8 +36,8 @@ def cart_update(request, sku):
     form = CartUpdateProductForm(request.POST)
     if form.is_valid():
         cd = form.cleaned_data
-        product_sku = ProductPackaging.objects.get(sku=sku)
-        Cart.objects.filter(user=request.user, product_sku=product_sku).\
+        pack = ProductPack.objects.get(sku=sku)
+        Cart.objects.filter(user=request.user, pack=pack).\
             update(quantity=cd.get('quantity'))
 
     return redirect('cart:cart_detail')
@@ -46,8 +46,8 @@ def cart_update(request, sku):
 @login_required
 @require_POST
 def cart_remove(request, sku):
-    product_sku = ProductPackaging.objects.get(sku=sku)
-    cart = Cart.objects.filter(user=request.user, product_sku=product_sku)
+    pack = ProductPack.objects.get(sku=sku)
+    cart = Cart.objects.filter(user=request.user, pack=pack)
     cart.delete()
 
     return redirect('cart:cart_detail')
@@ -63,6 +63,9 @@ class CartView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        # сделать через SQL
+
         total_price = sum([item.get_total_price() for item in self.object_list])
         context['total_price'] = total_price
         context['title'] = 'Корзина'

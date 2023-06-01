@@ -7,7 +7,7 @@
 <ul></ul>
   {% for item in request.user.cart.all %}
     <li>
-      {{ item.product_sku.product.name }}, {{ item.product_sku.weight | convert_weight }}.: итого {{ item.get_total_weight | convert_weight }}
+      {{ item.pack.product.name }}, {{ item.pack.weight | convert_weight }}.: итого {{ item.get_total_weight | convert_weight }}
     </li>
   {% endfor %}
 </ul>

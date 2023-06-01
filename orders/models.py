@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 
-from core.models import ProductPackaging
+from core.models import ProductPack
 
 User = get_user_model()
 
@@ -17,7 +17,6 @@ class Order(models.Model):
 
     class Meta:
         ordering = ('-created',)
-        indexes = (models.Index(fields=['-created']),)
         verbose_name = 'Заказ'
         verbose_name_plural = 'Заказы'
 
@@ -28,9 +27,9 @@ class Order(models.Model):
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, verbose_name='Заказ', related_name='items',
                               on_delete=models.CASCADE)
-    product_sku = models.ForeignKey(ProductPackaging, verbose_name='Товар',
-                                    related_name='order_items', null=True,
-                                    on_delete=models.SET_NULL)
+    pack = models.ForeignKey(ProductPack, verbose_name='Фасовка',
+                             related_name='order_item', null=True,
+                             on_delete=models.SET_NULL)
     quantity = models.PositiveIntegerField('Количество', default=1)
 
     class Meta():
@@ -38,7 +37,7 @@ class OrderItem(models.Model):
         verbose_name_plural = 'Товары'
 
     def get_total_weight(self) -> int:
-        return self.product_sku.get_package_weight() * self.quantity
+        return self.pack.get_package_weight() * self.quantity
 
     def __str__(self):
         return str(self.id)

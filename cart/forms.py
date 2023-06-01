@@ -6,7 +6,7 @@ from django.forms import BaseFormSet
 class CartAddProductForm(forms.Form):
     quantity = forms.IntegerField(label='', min_value=0,
                                   max_value=999, required=False)
-    product_sku = forms.CharField(widget=forms.HiddenInput)
+    sku = forms.CharField(widget=forms.HiddenInput)
 
 
 class CartUpdateProductForm(forms.Form):
