@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Sum, F
 from django.forms import formset_factory
 from django.shortcuts import redirect
 from django.views.decorators.http import require_POST
@@ -58,15 +59,19 @@ class CartView(LoginRequiredMixin, ListView):
     template_name = 'cart/cart.html'
 
     def get_queryset(self):
-        user_cart = Cart.objects.filter(user=self.request.user)
+        user_cart = Cart.objects.filter(user=self.request.user).\
+            select_related('pack__product')
         return user_cart
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        # сделать через SQL
+        # total_price = sum([item.get_total_price() for item in self.object_list])
+        total_price = self.object_list.aggregate(tp=Sum(F('quantity') *
+                                                        F('pack__price') *
+                                                        F('pack__items_in_box'))).\
+            get('tp')
 
-        total_price = sum([item.get_total_price() for item in self.object_list])
         context['total_price'] = total_price
         context['title'] = 'Корзина'
         return context

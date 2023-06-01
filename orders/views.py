@@ -3,7 +3,6 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView
 
 from cart.models import Cart
-from core.models import ProductPack
 from orders.models import Order, OrderItem
 from orders.utils import send_order_email
 
