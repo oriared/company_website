@@ -15,11 +15,6 @@ class CooperationCreateView(CreateView):
         name = self.kwargs.get('type')
         return f'cooperation/{name}.html'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = self.kwargs.get('type')
-        return context
-
     def form_valid(self, form):
         form.instance.subject = self.kwargs.get('type')
         self.object = form.save()
