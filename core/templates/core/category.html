@@ -4,7 +4,7 @@
 <ul class="nav nav-underline" style="background-color: blanchedalmond; padding-inline: 15%;">
     {% for cat in categories %}
     <li class="nav-item">
-      <a class="nav-link {% if request.kwargs.slug == cat.slug %}active" 
+      <a class="nav-link {% if current_cat == cat.slug %}active" 
       aria-current="page{% endif %}" style="color: red;" 
       href="{% url 'core:products' cat.slug %}">{{ cat }}</a>
     </li>

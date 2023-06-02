@@ -1,9 +1,13 @@
+from django.contrib.auth import get_user_model
 from django.forms import formset_factory
 from django.views.generic import ListView, DetailView
 from django.views.generic.base import TemplateView
 
 from core.models import Product, Category, Carousel
 from cart.forms import CartAddProductForm, BaseAddProductFormSet
+
+
+User = get_user_model()
 
 
 class HomePageView(TemplateView):
@@ -29,6 +33,7 @@ class ProductsListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = Category.published.get(slug=self.kwargs['slug']).name
+        context['current_cat'] = self.kwargs['slug']
         return context
 
 
@@ -51,4 +56,15 @@ class ProductView(DetailView):
             context['cart_add_formset_with_packs'] = zip(packs, formset)
             context['management_form'] = formset.management_form
         context['title'] = self.object.name
+        return context
+
+
+class ProfileView(TemplateView):
+
+    template_name = 'core/profile.html'
+    slug_field = 'username'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['user'] = self.request.user
         return context

@@ -1,0 +1,12 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}{{ user.username}}{% endblock %}
+
+{% block content %}
+  <h3>{{ user.username }}</h3>
+  <ul>
+    <li><a href="{% url "cart:cart_detail" %}"><button type="button" class="btn btn-dark">Корзина</button></a></li>
+    <li><a href="{% url "orders:orders_list" %}"><button type="button" class="btn btn-dark">Заказы</button></a></li>
+  </ul>
+{% endblock %}

@@ -28,10 +28,10 @@
             <button type="button" class="btn btn-outline-light">Корзина: {{ total_items }}</button>
           </a>
         </li>
-        <li><a href="{% url "logout" %}">Выход</a></li>
+        <li><a href="{% url "logout" %}"><button type="button" class="btn btn-outline-light">Выход</button></a></li>
       {% endwith %}
       {% else %}
-        <a href="{% url "login" %}">Вход</a>
+        <a href="{% url "login" %}"><button type="button" class="btn btn-outline-light">Вход</button></a>
       {% endif %}
     </ul>
     </div>

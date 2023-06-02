@@ -1,0 +1,24 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+  <table class="table table-secondary">
+    <thead>
+      <tr>
+      <th>№</th>
+      <th>Дата</th>
+      <th>Общий вес</th>
+      <th>Стоимость</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for order in orders %}
+        <tr>
+          <td><a href="{% url "orders:created" order.pk %}">{{ forloop.revcounter }}</a></td>
+            <td><a href="{% url "orders:created" order.pk %}"> {{ order.created }}</a></td>
+            <td><a href="{% url "orders:created" order.pk %}"> {{ order }}</a></td>
+            <td><a href="{% url "orders:created" order.pk %}"> {{ order }}</a></td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

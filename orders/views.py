@@ -1,6 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, DetailView
+from django.views.generic import CreateView, DetailView, ListView
 
 from cart.models import Cart
 from orders.models import Order, OrderItem
@@ -42,3 +42,12 @@ class CreatedOrderView(LoginRequiredMixin, DetailView):
 
     def get_queryset(self):
         return Order.objects.prefetch_related('items__pack__product')
+
+
+class OrderListView(ListView):
+
+    template_name = 'orders/list_orders.html'
+    context_object_name = 'orders'
+
+    def get_queryset(self):
+        return Order.objects.filter(user=self.request.user)
