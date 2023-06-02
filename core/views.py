@@ -23,11 +23,12 @@ class ProductsListView(ListView):
     context_object_name = 'products'
 
     def get_queryset(self):
-        return Product.published.filter(type__category__slug=self.kwargs['slug'])
+        return Product.published.filter(type__category__slug=self.kwargs['slug'])\
+            .select_related('type__category')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = Category.objects.get(slug=self.kwargs.get('slug')).name
+        context['title'] = Category.published.get(slug=self.kwargs['slug']).name
         return context
 
 
@@ -36,16 +37,15 @@ class ProductView(DetailView):
     template_name = 'core/product.html'
 
     def get_queryset(self):
-        return Product.published.select_related('productdetail').all()
+        return Product.published.select_related('productdetail')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.request.user.is_authenticated:
-            product = Product.published.get(slug=self.kwargs.get('slug'))
             ProductFormSet = formset_factory(CartAddProductForm,
                                              formset=BaseAddProductFormSet,
                                              extra=0)
-            packs = product.pack.all()
+            packs = self.object.pack.all()
             initial = tuple(packs.values('sku'))
             formset = ProductFormSet(initial=initial)
             context['cart_add_formset_with_packs'] = zip(packs, formset)

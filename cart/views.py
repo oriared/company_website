@@ -14,6 +14,7 @@ from core.models import ProductPack
 class CartView(LoginRequiredMixin, ListView):
 
     template_name = 'cart/cart.html'
+    context_object_name = 'cart'
 
     def get_queryset(self):
         user_cart = Cart.objects.filter(user=self.request.user).\

@@ -19,6 +19,7 @@ class OrderCreateView(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Оформление заказа'
+        context['cart'] = self.request.user.cart.select_related('pack__product')
         return context
 
     def form_valid(self, form):
@@ -37,9 +38,7 @@ class OrderCreateView(LoginRequiredMixin, CreateView):
 class CreatedOrderView(LoginRequiredMixin, DetailView):
 
     template_name = 'orders/order/created_order.html'
-    model = Order
+    context_object_name = 'order'
 
-    def dispatch(self, request, *args, **kwargs):
-        if request.user != self.get_object().user:
-            return super().handle_no_permission()
-        return super().dispatch(request, *args, **kwargs)
+    def get_queryset(self):
+        return Order.objects.prefetch_related('items__pack__product')

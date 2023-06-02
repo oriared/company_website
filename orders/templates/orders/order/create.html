@@ -3,9 +3,9 @@
 
 {% block content %}
 <h2>Оформление заказа</h2>
-Вы заказываете {{ request.user.cart.count }} позиций:
+Вы заказываете {{ cart | length }} позиций:
 <ul></ul>
-  {% for item in request.user.cart.all %}
+  {% for item in cart %}
     <li>
       {{ item.pack.product.name }}, {{ item.pack.weight | convert_weight }}.: итого {{ item.get_total_weight | convert_weight }}
     </li>
