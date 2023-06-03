@@ -124,6 +124,16 @@ class Category(models.Model):
         ordering = ['name']
 
 
+class PriceImport(models.Model):
+    csv_file = models.FileField('Файл', upload_to='uploads/')
+    date_added = models.DateTimeField('Дата загрузки', auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Импорт цен'
+        verbose_name_plural = 'Импорт цен'
+        ordering = ['-date_added']
+
+
 class Carousel(models.Model):
     description = models.CharField('Описание', max_length=100)
     image = models.ImageField('Изображение', upload_to='images/carousel/')
