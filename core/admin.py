@@ -8,6 +8,7 @@ from core.forms import PriceImportForm
 from core.models import (Product, ProductType, Category, ProductDetail,
                          ProductPack, PriceImport, Carousel)
 
+
 class ProductDetailInline(admin.StackedInline):
     model = ProductDetail
     fields = ('description', 'conditions', ('storage_time', 'storage_time_units'),

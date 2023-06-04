@@ -1,13 +1,12 @@
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Sum, F
 from django.forms import formset_factory
 from django.shortcuts import redirect
-from django.views.decorators.http import require_POST
-from django.views.generic import ListView, View
+from django.urls import reverse_lazy
+from django.views.generic import ListView, View, DeleteView, UpdateView
 
 from cart.models import Cart
-from cart.forms import CartAddProductForm, CartUpdateProductForm, BaseAddProductFormSet
+from cart.forms import CartAddProductForm, BaseAddProductFormSet
 from core.models import ProductPack
 
 
@@ -36,7 +35,7 @@ class CartView(LoginRequiredMixin, ListView):
         return context
 
 
-class CartAddView(LoginRequiredMixin, View):
+class CartAdd(LoginRequiredMixin, View):
 
     def post(self, request):
 
@@ -56,24 +55,47 @@ class CartAddView(LoginRequiredMixin, View):
         return redirect('cart:cart_detail')
 
 
-@login_required
-@require_POST
-def cart_update(request, sku):
-    form = CartUpdateProductForm(request.POST)
-    if form.is_valid():
-        cd = form.cleaned_data
-        pack = ProductPack.objects.get(sku=sku)
-        Cart.objects.filter(user=request.user, pack=pack).\
-            update(quantity=cd.get('quantity'))
+class CartUpdate(LoginRequiredMixin, UpdateView):
 
-    return redirect('cart:cart_detail')
+    fields = ('quantity',)
+    slug_url_kwarg = 'sku'
+    slug_field = 'pack__sku'
+
+    success_url = reverse_lazy('cart:cart_detail')
+
+    def get_queryset(self):
+        return Cart.objects.filter(user=self.request.user)
 
 
-@login_required
-@require_POST
-def cart_remove(request, sku):
-    pack = ProductPack.objects.get(sku=sku)
-    cart = Cart.objects.filter(user=request.user, pack=pack)
-    cart.delete()
+class CartRemove(LoginRequiredMixin, DeleteView):
 
-    return redirect('cart:cart_detail')
+    def get_queryset(self):
+        return Cart.objects.filter(user=self.request.user)
+
+    slug_field = 'pack__sku'
+
+    slug_url_kwarg = 'sku'
+    success_url = reverse_lazy('cart:cart_detail')
+
+
+# @login_required
+# @require_POST
+# def cart_update(request, sku):
+#     form = CartUpdateProductForm(request.POST)
+#     if form.is_valid():
+#         cd = form.cleaned_data
+#         pack = ProductPack.objects.get(sku=sku)
+#         Cart.objects.filter(user=request.user, pack=pack).\
+#             update(quantity=cd.get('quantity'))
+
+#     return redirect('cart:cart_detail')
+
+
+# @login_required
+# @require_POST
+# def cart_remove(request, sku):
+#     pack = ProductPack.objects.get(sku=sku)
+#     cart = Cart.objects.filter(user=request.user, pack=pack)
+#     cart.delete()
+
+#     return redirect('cart:cart_detail')
