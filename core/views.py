@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.forms import formset_factory
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView
 from django.views.generic.base import TemplateView
 
 from core.models import Product, Category, Carousel
