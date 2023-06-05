@@ -5,7 +5,7 @@ from cooperation.utils import path_upload_file
 class Cooperation(models.Model):
     subject = models.CharField('Тема', max_length=30)
     company = models.CharField('Компания', max_length=100)
-    person = models.CharField('ФИО', max_length=100)
+    name = models.CharField('Контактное лицо', max_length=100)
     phone = models.CharField('Телефон', max_length=11)
     email = models.EmailField('Email')
     city = models.CharField('Город', max_length=50, blank=True)
