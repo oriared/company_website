@@ -50,6 +50,9 @@ class PriceImportAdmin(admin.ModelAdmin):
     def has_add_permission(self, request):
         return False
 
+    def has_change_permission(request, obj=None):
+        return False
+
     def get_urls(self):
         urls = super().get_urls()
         urls.insert(-1, path('csv-upload/', self.upload_csv))
