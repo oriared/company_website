@@ -8,7 +8,7 @@ from cooperation.utils import email_from_form
 class CooperationCreateView(CreateView):
 
     model = Cooperation
-    fields = ('company', 'person', 'phone', 'email', 'city', 'text', 'file')
+    fields = ('company', 'name', 'phone', 'email', 'city', 'text', 'file')
     success_url = reverse_lazy('core:home')
 
     def get_template_names(self):

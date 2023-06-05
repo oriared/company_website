@@ -17,14 +17,14 @@ def email_from_form(form: Form) -> None:
     data = form.cleaned_data
 
     company = data['company']
-    person = data['person']
+    name = data['name']
     phone = data['phone']
     mail = data['email']
     subject = form.instance.subject
     text = data['text']
 
     email_subject = f'{subject}: заявка от {company}'
-    email_body = f'{text}\n\n{person}\n{phone}\n{mail}'
+    email_body = f'{text}\n\n{name}\n{phone}\n{mail}'
     message = EmailMessage(
         subject=email_subject,
         body=email_body,

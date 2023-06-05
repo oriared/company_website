@@ -93,7 +93,7 @@ class ProductPack(models.Model):
 
 
 class ProductType(models.Model):
-    name = models.CharField('Категория', max_length=100, db_index=True)
+    name = models.CharField('Тип', max_length=100, db_index=True)
     slug = models.SlugField('URL', max_length=255, unique=True)
     category = models.ForeignKey('Category', verbose_name='Категория',
                                  on_delete=models.CASCADE)
