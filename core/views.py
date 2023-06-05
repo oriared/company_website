@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.forms import formset_factory
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, CreateView
 from django.views.generic.base import TemplateView
 
 from core.models import Product, Category, Carousel
@@ -50,7 +50,7 @@ class ProductView(DetailView):
             ProductFormSet = formset_factory(CartAddProductForm,
                                              formset=BaseAddProductFormSet,
                                              extra=0)
-            packs = self.object.pack.all()
+            packs = self.object.pack.filter(is_published=True)
             initial = tuple(packs.values('sku'))
             formset = ProductFormSet(initial=initial)
             context['cart_add_formset_with_packs'] = zip(packs, formset)

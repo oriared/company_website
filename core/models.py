@@ -73,6 +73,11 @@ class ProductPack(models.Model):
     items_in_box = models.PositiveIntegerField('Вложение, шт')
     price = models.DecimalField('Цена', max_digits=8, decimal_places=2)
 
+    is_published = models.BooleanField('Доступен', default=True)
+
+    objects = models.Manager()
+    published = PublishedManager()
+
     def __str__(self):
         return self.sku
 
