@@ -17,7 +17,6 @@ class CartFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Cart
 
-    user = User.objects.create_user(username='test_user_38724',
-                                    password='38462398568')
-    product_sku = factory.SubFactory(ProductPackFactory)
+    user = User.objects.get(username='test_user')
+    pack = factory.SubFactory(ProductPackFactory)
     quantity = factory_ru.pyint(min_value=1, max_value=100)
