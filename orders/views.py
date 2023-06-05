@@ -1,5 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.urls import reverse_lazy
+from django.urls import reverse
 from django.views.generic import CreateView, DetailView, ListView
 
 from cart.models import Cart
@@ -14,7 +14,7 @@ class OrderCreateView(LoginRequiredMixin, CreateView):
     fields = ('comment',)
 
     def get_success_url(self):
-        return reverse_lazy('orders:created', kwargs={'pk': self.object.pk})
+        return reverse('orders:created', kwargs={'pk': self.object.pk})
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -23,15 +23,17 @@ class OrderCreateView(LoginRequiredMixin, CreateView):
         return context
 
     def form_valid(self, form):
-        self.object = form.save(commit=False)
-        self.object.user = self.request.user
-        self.object.save()
+        form.instance.user = self.request.user
+        self.object = form.save()
+
         for item in Cart.objects.filter(user=self.request.user):
             OrderItem.objects.create(order=self.object,
                                      pack=item.pack,
                                      quantity=item.quantity)
+
         send_order_email(order=self.object)
         Cart.objects.filter(user=self.request.user).delete()
+
         return super().form_valid(form)
 
 

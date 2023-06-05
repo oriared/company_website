@@ -45,10 +45,10 @@ class CartViewsTest(TestCase):
         response = self.client.post(reverse('cart:cart_update',
                                             kwargs={'sku': cart.pack.sku}),
                                     data=data)
-        updated_cart = Cart.objects.get(pk=cart.pk)
+        cart.refresh_from_db()
 
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(updated_cart.quantity, data.get('quantity'))
+        self.assertEqual(cart.quantity, data.get('quantity'))
 
     def test_cart_remove_view(self):
 

@@ -7,6 +7,7 @@ class OrderItemInline(admin.TabularInline):
     model = OrderItem
     raw_id_fields = ('pack',)
     readonly_fields = ('pack', 'order', 'quantity')
+    extra = 0
 
 
 @admin.register(Order)
