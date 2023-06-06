@@ -1,30 +1,27 @@
-import os
 from django.core.mail import EmailMessage
-from django.db.models import Model
-from django.forms import Form
 
 from config import settings
+from cooperation.models import Cooperation
 
 
-def path_upload_file(instance: Model, filename: str) -> str:
+def path_upload_file(instance: Cooperation, filename: str) -> str:
     return f'cooperation/{instance.company}/{filename}'
 
 
-def email_from_form(form: Form) -> None:
+def send_email_cooperation(coop_object: Cooperation) -> None:
 
     # добавить поддержку кириллицы
 
-    data = form.cleaned_data
-
-    company = data['company']
-    name = data['name']
-    phone = data['phone']
-    mail = data['email']
-    subject = form.instance.subject
-    text = data['text']
+    company = coop_object.company
+    name = coop_object.name
+    phone = coop_object.phone
+    mail = coop_object.email
+    subject = coop_object.subject
+    text = coop_object.text
 
     email_subject = f'{subject}: заявка от {company}'
     email_body = f'{text}\n\n{name}\n{phone}\n{mail}'
+
     message = EmailMessage(
         subject=email_subject,
         body=email_body,
@@ -32,10 +29,10 @@ def email_from_form(form: Form) -> None:
         to=(settings.EMAIL_HOST_USER,)
     )
 
-    if data.get('file'):
-        filename = data['file'].name.replace(' ', '_')
-        file = os.path.join(settings.MEDIA_ROOT, 'cooperation',
-                            company, filename)
-        message.attach_file(file)
+    if coop_object.file:
+        filename = coop_object.file.name.rsplit('/', 1)[-1]
+        with coop_object.file.open('r') as f:
+            file = f.read()
+            message.attach(filename, file)
 
     message.send()

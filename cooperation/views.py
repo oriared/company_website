@@ -2,7 +2,7 @@ from django.views.generic.edit import CreateView
 from django.urls import reverse_lazy
 
 from cooperation.models import Cooperation
-from cooperation.utils import email_from_form
+from cooperation.utils import send_email_cooperation
 
 
 class CooperationCreateView(CreateView):
@@ -18,5 +18,5 @@ class CooperationCreateView(CreateView):
     def form_valid(self, form):
         form.instance.subject = self.kwargs.get('type')
         self.object = form.save()
-        email_from_form(form)
+        send_email_cooperation(self.object)
         return super().form_valid(form)
