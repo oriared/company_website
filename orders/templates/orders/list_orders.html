@@ -6,7 +6,6 @@
       <tr>
       <th>№</th>
       <th>Дата</th>
-      <th>Общий вес</th>
       <th>Стоимость</th>
       </tr>
     </thead>
@@ -15,8 +14,7 @@
         <tr>
           <td><a href="{% url "orders:created" order.pk %}">{{ forloop.revcounter }}</a></td>
             <td><a href="{% url "orders:created" order.pk %}"> {{ order.created }}</a></td>
-            <td><a href="{% url "orders:created" order.pk %}"> {{ order }}</a></td>
-            <td><a href="{% url "orders:created" order.pk %}"> {{ order }}</a></td>
+            <td><a href="{% url "orders:created" order.pk %}"> {{ order.get_order_price }}</a></td>
         </tr>
       {% endfor %}
     </tbody>

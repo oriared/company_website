@@ -7,6 +7,7 @@
   {% for item in order.items.all %}
     <p>{{ item.pack.product.name }}, {{ item.pack.weight | convert_weight }}: {{ item.quantity }} коробок общим весом {{ item.get_total_weight | convert_weight }}</p>
   {% endfor %}
+  <p>Итоговая стоимость: {{ order.get_order_price }}</p>
   <p>Ваш комментарий: {{ order.comment }}</p>
   {% else %}
     Нет доступа

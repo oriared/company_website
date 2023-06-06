@@ -1,7 +1,11 @@
+from decimal import Decimal
+
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.db.models import F, Sum
 
 from core.models import ProductPack
+
 
 User = get_user_model()
 
@@ -20,8 +24,14 @@ class Order(models.Model):
         verbose_name = 'Заказ'
         verbose_name_plural = 'Заказы'
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f'Заказ {self.id}'
+
+    def get_order_price(self) -> Decimal:
+        op = self.items.annotate(op=F('pack__price')
+                                 * F('pack__items_in_box')
+                                 * F('quantity')).aggregate(Sum('op')).get('op__sum')
+        return op.quantize(Decimal('1.00'))
 
 
 class OrderItem(models.Model):
@@ -29,7 +39,7 @@ class OrderItem(models.Model):
                               on_delete=models.CASCADE)
     pack = models.ForeignKey(ProductPack, verbose_name='Фасовка',
                              related_name='order_item', null=True,
-                             on_delete=models.SET_NULL)
+                             on_delete=models.PROTECT)
     quantity = models.PositiveIntegerField('Количество', default=1)
 
     class Meta():
@@ -39,5 +49,9 @@ class OrderItem(models.Model):
     def get_total_weight(self) -> int:
         return self.pack.get_package_weight() * self.quantity
 
-    def __str__(self):
+    def get_total_price(self) -> Decimal:
+        tp = self.pack.get_package_price() * self.quantity
+        return tp.quantize(Decimal('1.00'))
+
+    def __str__(self) -> str:
         return str(self.id)

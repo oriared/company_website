@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Sum, F
 from django.forms import formset_factory
@@ -23,14 +25,14 @@ class CartView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        # total_price = sum([item.get_total_price() for item in self.object_list])
+        if self.object_list:
+            # total_price = sum([item.get_total_price() for item in self.object_list])
+            total_price = self.object_list.aggregate(tp=Sum(F('quantity') *
+                                                            F('pack__price') *
+                                                            F('pack__items_in_box'))).\
+                get('tp').quantize(Decimal('1.00'))
+            context['total_price'] = total_price
 
-        total_price = self.object_list.aggregate(tp=Sum(F('quantity') *
-                                                        F('pack__price') *
-                                                        F('pack__items_in_box'))).\
-            get('tp')
-
-        context['total_price'] = total_price
         context['title'] = 'Корзина'
         return context
 

@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.db import models
 from django.urls import reverse
 
@@ -84,8 +86,9 @@ class ProductPack(models.Model):
     def get_package_weight(self) -> int:
         return self.weight * self.items_in_box
 
-    def get_package_price(self) -> float:
-        return self.price * self.items_in_box
+    def get_package_price(self) -> Decimal:
+        pp = self.price * self.items_in_box
+        return pp.quantize(Decimal('1.00'))
 
     class Meta:
         verbose_name = 'Фасовка'
