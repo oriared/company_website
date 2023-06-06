@@ -43,7 +43,8 @@ class CreatedOrderView(LoginRequiredMixin, DetailView):
     context_object_name = 'order'
 
     def get_queryset(self):
-        return Order.objects.prefetch_related('items__pack__product')
+        return Order.objects.prefetch_related('items__pack__product')\
+            .select_related('user')
 
 
 class OrderListView(ListView):
