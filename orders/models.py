@@ -3,6 +3,7 @@ from decimal import Decimal
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.db.models import F, Sum
+from django.urls import reverse
 
 from core.models import ProductPack
 
@@ -26,6 +27,9 @@ class Order(models.Model):
 
     def __str__(self) -> str:
         return f'Заказ {self.id}'
+
+    def get_absolute_url(self) -> str:
+        return reverse('orders:created', kwargs={'pk': self.pk})
 
     def get_order_price(self) -> Decimal:
         op = self.items.annotate(op=F('pack__price')

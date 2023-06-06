@@ -24,7 +24,7 @@ class Product(models.Model):
     objects = models.Manager()
     published = PublishedManager()
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
     def get_absolute_url(self) -> str:
@@ -80,7 +80,7 @@ class ProductPack(models.Model):
     objects = models.Manager()
     published = PublishedManager()
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.sku
 
     def get_package_weight(self) -> int:
@@ -101,7 +101,7 @@ class ProductType(models.Model):
     category = models.ForeignKey('Category', verbose_name='Категория',
                                  on_delete=models.CASCADE)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
     class Meta:
@@ -120,7 +120,7 @@ class Category(models.Model):
     objects = models.Manager()
     published = PublishedManager()
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
     def get_absolute_url(self) -> str:
