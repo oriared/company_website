@@ -55,7 +55,7 @@
   <p>Итоговая стоимость: {{ total_price }}</p>
   {% endif %}
   <p class="text-right">
-    <a href="{% url "core:products" "waffles" %}" class="button light">В каталог</a>
+    <a href="{% url "core:category" "waffles" %}" class="button light">В каталог</a>
     {% if cart.count %}
     <a href="{% url "orders:create" %}" class="button">Оформить</a>
     {% endif %}

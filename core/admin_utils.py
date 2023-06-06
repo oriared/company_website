@@ -1,12 +1,13 @@
 import csv
+from typing import Optional
 
 from core.models import ProductPack, PriceImport
-from typing import Optional
 
 
 def check_file(form_object: PriceImport) -> list[Optional[str]]:
 
     with form_object.csv_file.open('r') as csv_file:
+
         rows = csv.DictReader(csv_file)
 
         if sorted(rows.fieldnames) != ['price', 'sku']:
@@ -18,6 +19,7 @@ def check_file(form_object: PriceImport) -> list[Optional[str]]:
             price_validation(row['price'])
             if not ProductPack.objects.filter(sku=row['sku']).exists():
                 no_matched.append(row['sku'])
+
     return no_matched
 
 
@@ -43,7 +45,7 @@ def update_prices_from_file(form_object: PriceImport, change_visability: bool) -
                 ProductPack.objects.filter(sku=row['sku']).update(price=price)
 
 
-def price_validation(price):
+def price_validation(price: str) -> None:
     p = price.replace(',', '.')
     try:
         float(p)

@@ -5,8 +5,8 @@
 
 {% block content %}
   <h3>{{ user.username }}</h3>
-  <ul>
-    <li><a href="{% url "cart:cart_detail" %}"><button type="button" class="btn btn-dark">Корзина</button></a></li>
-    <li><a href="{% url "orders:orders_list" %}"><button type="button" class="btn btn-dark">Заказы</button></a></li>
-  </ul>
+  <div class="btn-group-vertical" role="group" aria-label="Vertical button group">
+    <a type="button" class="btn btn-outline-dark" href="{% url "cart:cart_detail" %}">Корзина</a>
+    <a type="button" class="btn btn-outline-dark" href="{% url "orders:orders_list" %}">Заказы</a>
+  </div>
 {% endblock %}

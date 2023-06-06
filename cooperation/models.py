@@ -13,7 +13,7 @@ class Cooperation(models.Model):
     file = models.FileField('Файл', upload_to=path_upload_file, blank=True)
     created = models.DateTimeField('Дата', auto_now_add=True)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f'{self.company}: {self.email}'
 
     class Meta:

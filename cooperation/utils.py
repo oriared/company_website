@@ -1,14 +1,18 @@
+import typing
+
 from django.core.mail import EmailMessage
 
 from config import settings
-from cooperation.models import Cooperation
+
+if typing.TYPE_CHECKING:
+    from cooperation.models import Cooperation
 
 
-def path_upload_file(instance: Cooperation, filename: str) -> str:
+def path_upload_file(instance: 'Cooperation', filename: str) -> str:
     return f'cooperation/{instance.company}/{filename}'
 
 
-def send_email_cooperation(coop_object: Cooperation) -> None:
+def send_email_cooperation(coop_object: 'Cooperation') -> None:
 
     # добавить поддержку кириллицы
 

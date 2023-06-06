@@ -12,9 +12,10 @@ class HomePageTest(TestCase):
 
     def test_home_page_view(self):
         response = self.client.get(reverse('core:home'))
+
         self.assertEqual(response.status_code, 200)
         self.assertEqual(tuple(response.context['categories']),
-                         tuple(Category.objects.filter(is_published=True)))
+                         tuple(Category.published.all()))
 
 
 class CategoryTest(TestCase):
@@ -23,12 +24,14 @@ class CategoryTest(TestCase):
         self.category = self.product.type.category
 
     def test_category_view(self):
-        response = self.client.get(reverse('core:products',
-                                           args=(self.category.slug,)))
+        response = self.client.get(reverse('core:category',
+                                           kwargs={'slug': self.category.slug}))
+
         self.assertEqual(response.status_code, 200)
 
     def test_category_get_absolute_url(self):
         response = self.client.get(self.category.get_absolute_url())
+
         self.assertEqual(response.context['products'].first().type.category,
                          self.category)
 
@@ -39,9 +42,11 @@ class ProductTest(TestCase):
 
     def test_product_view(self):
         response = self.client.get(reverse('core:product',
-                                           args=(self.product.slug,)))
+                                           kwargs={'slug': self.product.slug}))
+
         self.assertEqual(response.status_code, 200)
 
     def test_product_get_absolute_url(self):
         response = self.client.get(self.product.get_absolute_url())
+
         self.assertEqual(response.context['object'], self.product)

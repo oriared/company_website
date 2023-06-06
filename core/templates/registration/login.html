@@ -12,7 +12,8 @@
       <p>Авторизуйтесь, чтобы просматривать эту страницу.</p>
     {% endif %}
   {% endif %}
-
+  
+  <div style="padding: 5%;">
   <form method="post" action="{% url 'login' %}">
     {% csrf_token %}
     <table>
@@ -31,4 +32,6 @@
     <input type="submit" value="Войти" />
     <input type="hidden" name="next" value="{{ next }}" />
   </form>
+ </div>
+ 
 {% endblock %}
