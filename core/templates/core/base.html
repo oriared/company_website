@@ -17,22 +17,22 @@
 <body>
 <div class="row">
   <div class="col-2 bg-dark" style="padding-top: 2%;">
-    <div class="d-grid gap-1 col-5 mx-auto">
-      <ul>
+    <div class="d-grid">
+      <ul style="padding: 3%;">
       {% if request.user.is_authenticated %}
-      <a href="{% url "core:profile" %}"><button type="button" class="btn btn-outline-light">Профиль</button></a>
+      <a href="{% url "core:profile" %}"><button type="button" class="btn btn-outline-light d-grid gap-1 mx-auto" style="padding-bottom: 3%;">Профиль</button></a>
       <li>
       {% with total_items=request.user.cart.count %}
         {% if total_items > 0 %}
           <a href="{% url "cart:cart_detail" %}">
         {% endif %}
-            <button type="button" class="btn btn-outline-light">Корзина: {{ total_items }}</button>
+            <button type="button" class="btn btn-outline-light d-grid gap-1 mx-auto" style="padding-bottom: 3%;">Корзина: {{ total_items }}</button>
           </a>
         </li>
-        <li><a href="{% url "logout" %}"><button type="button" class="btn btn-outline-light">Выход</button></a></li>
+        <li><a href="{% url "logout" %}"><button type="button" class="btn btn-outline-light d-grid gap-1 mx-auto" style="padding-bottom: 3%;">Выход</button></a></li>
       {% endwith %}
       {% else %}
-        <a href="{% url "login" %}"><button type="button" class="btn btn-outline-light">Вход</button></a>
+        <a href="{% url "login" %}"><button type="button" class="btn btn-outline-light d-grid gap-1 mx-auto" style="padding-bottom: 3%;">Вход</button></a>
       {% endif %}
     </ul>
     </div>
